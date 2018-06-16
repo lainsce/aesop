@@ -1,6 +1,6 @@
-# ![icon](data/icon.png) Coin
+# ![icon](data/icon.png) Aesop
 
-## Track the virtual currencies in real world currency value with this handy applet
+## The simplest PDF viewer around
 
 [![Get it on AppCenter](https://appcenter.elementary.io/badge.svg)](https://appcenter.elementary.io/com.github.lainsce.coin)
 
