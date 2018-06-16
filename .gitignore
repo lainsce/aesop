@@ -1,0 +1,11 @@
+build/
+~*
+*~
+debian/com.github.lainsce.aesop.debhelper.log
+debian/com.github.lainsce.aesop.substvars
+debian/com.github.lainsce.aesop/
+debian/debhelper-build-stamp
+debian/files
+obj-x86_64-linux-gnu/
+.vscode
+.buildconfig

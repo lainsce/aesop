@@ -1,0 +1,34 @@
+<schemalist>
+  <schema id="com.github.lainsce.aesop" path="/com/github/lainsce/aesop/">
+    <key name="width" type="i">
+      <default>770</default>
+      <summary>Width</summary>
+      <description>Main window width</description>
+    </key>
+    <key name="height" type="i">
+      <default>540</default>
+      <summary>Heigth</summary>
+      <description>Main window heigth</description>
+    </key>
+    <key name="maximized" type="b">
+      <default>false</default>
+      <summary>Maximized</summary>
+      <description>Main window maximized</description>
+    </key>
+    <key name="zoom" type="d">
+      <default>1.25</default>
+      <summary>Zoom</summary>
+      <description>Default zoom</description>
+    </key>
+    <key name="last-file" type="s">
+      <default>""</default>
+      <summary>last-file</summary>
+      <description>last-file</description>
+    </key>    
+    <key name="last-page" type="i">
+      <default>1</default>
+      <summary>last-page</summary>
+      <description>last-page</description>
+    </key>
+  </schema>
+</schemalist>

@@ -1,0 +1,18 @@
+@define-color colorPrimary #ccbbaa;
+@define-color textColorPrimary #333333;
+
+.aesop-toolbar {
+    border-bottom-color: shade(@colorPrimary, 0.5);
+    border-bottom-width: 1px;
+    background: linear-gradient(to bottom, @colorPrimary, shade(@colorPrimary, 0.8));
+    color: @textColorPrimary;
+    box-shadow: 0 1px shade(@colorPrimary, 1.01) inset;
+    text-shadow: 0 1px @text_shadow_color;
+    -gtk-icon-shadow: 0 1px @text_shadow_color;
+}
+
+.aesop-page {
+    border-style: solid;
+    border-width: 6px 6px 9px 7px;
+    border-image: url("resource:///com/github/lainsce/aesop/thumbnail-frame.png") 3 3 6 4;
+}

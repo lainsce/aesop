@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Aesop
+Comment=The simplest PDF viewer around
+Comment[pt_BR]=O mais simples leitor de PDF por aí
+Exec=com.github.lainsce.aesop
+Icon=com.github.lainsce.aesop
+Keywords=PDF;Document;Viewer;
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=GTK;Utility;Office;

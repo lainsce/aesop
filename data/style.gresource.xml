@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="/com/github/lainsce/aesop">
+        <file alias="stylesheet.css" compressed="true">stylesheet.css</file>
+    </gresource>
+    <gresource prefix="/com/github/lainsce/aesop">
+        <file alias="thumbnail-frame.png" compressed="true">images/thumbnail-frame.png</file>
+    </gresource>
+</gresources>
