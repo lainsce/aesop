@@ -15,6 +15,11 @@
       <summary>Maximized</summary>
       <description>Main window maximized</description>
     </key>
+    <key name="invert" type="b">
+      <default>false</default>
+      <summary>Invert</summary>
+      <description>Main window inverted</description>
+    </key>
     <key name="zoom" type="d">
       <default>1.25</default>
       <summary>Zoom</summary>

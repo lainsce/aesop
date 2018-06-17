@@ -44,6 +44,7 @@ executable(
     meson.project_name(),
     'src/Application.vala',
     'src/MainWindow.vala',
+    'src/Widgets/ModeSwitch.vala',
     'src/Constants/AppSettings.vala',
     asresources,
     c_args: c_args,

@@ -20,6 +20,7 @@ namespace Aesop {
         public int width { get; set; }
         public int height { get; set; }
         public bool maximized { get; set; }
+        public bool invert { get; set; }
         public double zoom { get; set; }
         public string last_file { get; set; }
         public int last_page { get; set; }

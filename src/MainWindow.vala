@@ -29,6 +29,10 @@ namespace Aesop {
         public Gtk.Adjustment page_horizontal_adjustment;
         public Gtk.Adjustment page_vertical_adjustment;
 
+        private const string LIGHT_ICON_SYMBOLIC = "display-brightness-symbolic";
+        private const string DARK_ICON_SYMBOLIC = "weather-clear-night-symbolic";
+        private ModeSwitch mode_switch;
+
         public SimpleActionGroup actions { get; construct; }
         public static Gee.MultiMap<string, string> action_accelerators = new Gee.HashMultiMap<string, string> ();
 
@@ -44,7 +48,6 @@ namespace Aesop {
         public MainWindow (Gtk.Application application) {
             Object (application: application,
                     resizable: true,
-                    title: _("Aesop"),
                     height_request: 600,
                     width_request: 600);
 
@@ -75,7 +78,6 @@ namespace Aesop {
             page_count = settings.last_page;
             filename = settings.last_file;
 
-            // widgets
             image = new Gtk.Image ();
 
             page = new Gtk.ScrolledWindow (null, null);
@@ -119,10 +121,26 @@ namespace Aesop {
                 action_open ();
             });
 
+            mode_switch = new ModeSwitch (LIGHT_ICON_SYMBOLIC, DARK_ICON_SYMBOLIC);
+            mode_switch.valign = Gtk.Align.CENTER;
+
+            mode_switch.notify["active"].connect (() => {
+                if (mode_switch.active) {
+                    debug ("Get dark!");
+                    settings.invert = true;
+                    render_page ();
+                } else {
+                    debug ("Get light!");
+                    settings.invert = false;
+                    render_page ();
+                }
+            });
+
             var page_label = new Gtk.Label (_("Page:"));
             var page_button = new Gtk.SpinButton.with_range (1, settings.pages_total, 1);
             page_button.set_value (page_count);
             page_button.has_focus = false;
+            page_button.vexpand = false;
 
             page_button.value_changed.connect (() => {
                 int val = page_button.get_value_as_int ();
@@ -135,9 +153,14 @@ namespace Aesop {
             box.pack_start (page_button, true, true, 0);
 
             toolbar.pack_start (open_button);
+            toolbar.pack_end (mode_switch);
             toolbar.pack_end (box);
 
             this.show_all ();
+
+            settings.changed.connect (() => {
+                render_page ();
+            });
 
             if (settings.last_file != "") {
                 File file = File.new_for_path (settings.last_file);
@@ -162,7 +185,6 @@ namespace Aesop {
             render_page ();
         }
 
-        // Mouse EventButton Scroll
         private bool button_scroll_event (Gdk.EventScroll event) {
             Gdk.ScrollDirection direction;
             event.get_scroll_direction (out direction);
@@ -259,35 +281,43 @@ namespace Aesop {
 
             total = document.get_n_pages ();
 
-            // page size
             double page_width;
             double page_height;
             var pages = document.get_page (page_count - 1);
             pages.get_size (out page_width, out page_height);
 
-            // image size
             int width  = (int)(settings.zoom * page_width);
             int height = (int)(settings.zoom * page_height);
 
-            // render page to cairo context
-            var surface = new Cairo.ImageSurface (Cairo.Format.ARGB32, width, height);
-            var context = new Cairo.Context (surface);
-            context.scale (settings.zoom, settings.zoom);
-            pages.render (context);
+            if (settings.invert) {
+                debug ("Get dark!");
+                var surface_dark = new Cairo.ImageSurface (Cairo.Format.ARGB32, width, height);
+                var context_dark = new Cairo.Context (surface_dark);
+                context_dark.set_operator (Cairo.Operator.DIFFERENCE);
+	            context_dark.set_source_rgba (1, 1, 1, 1);
+	            context_dark.rectangle (0, 0, page_width, page_height);
+                context_dark.paint ();
+                context_dark.scale (settings.zoom, settings.zoom);
+                pages.render (context_dark);
+                context_dark.set_operator (Cairo.Operator.DIFFERENCE);
+	            context_dark.set_source_rgba (1, 1, 1, 1);
+	            context_dark.rectangle (0, 0, page_width, page_height);
+                context_dark.paint ();
+                Gdk.Pixbuf pixbuf_dark = Gdk.pixbuf_get_from_surface (surface_dark, 0, 0, width, height);
+                this.image.set_from_pixbuf (pixbuf_dark);
+            } else {
+                debug ("Get light!");
+                var surface = new Cairo.ImageSurface (Cairo.Format.ARGB32, width, height);
+                var context = new Cairo.Context (surface);
+                context.scale (settings.zoom, settings.zoom);
+                pages.render (context);
+                Gdk.Pixbuf pixbuf = Gdk.pixbuf_get_from_surface (surface, 0, 0, width, height);
+                this.image.set_from_pixbuf (pixbuf);
+            }
 
-            // get pixbuf from surface
-            Gdk.Pixbuf pixbuf = Gdk.pixbuf_get_from_surface (surface, 0, 0, width, height);
-
-            // set title
             this.set_title (("Aesop - %s (%d/%d)").printf (GLib.Path.get_basename (filename), page_count, total));
-
-            // image from pixbuf
-            this.image.set_from_pixbuf (pixbuf);
-
-            // move scrollbar's adjustment
             this.page.get_vadjustment ().set_value (0);
 
-            // save
             settings.last_file = filename;
             settings.last_page = page_count;
             settings.pages_total = total;
