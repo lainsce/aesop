@@ -47,7 +47,7 @@ namespace Aesop {
                     title: _("Aesop"),
                     height_request: 600,
                     width_request: 600);
-        
+
             key_press_event.connect ((e) => {
                 uint keycode = e.hardware_keycode;
                 if ((e.state & Gdk.ModifierType.CONTROL_MASK) != 0) {
@@ -57,7 +57,7 @@ namespace Aesop {
                 }
                 if ((e.state & Gdk.ModifierType.CONTROL_MASK) != 0) {
                     if (match_keycode (Gdk.Key.o, keycode)) {
-                        action_open();
+                        action_open ();
                     }
                 }
                 return false;
@@ -70,20 +70,20 @@ namespace Aesop {
             Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
             var settings = AppSettings.get_default ();
 
-            this.set_title(("Aesop - %s (%d/%d)").printf(GLib.Path.get_basename(settings.last_file), page_count, total));
+            this.set_title (("Aesop - %s (%d/%d)").printf (GLib.Path.get_basename (settings.last_file), page_count, total));
 
             page_count = settings.last_page;
             filename = settings.last_file;
 
             // widgets
-            image = new Gtk.Image();
+            image = new Gtk.Image ();
 
-            page = new Gtk.ScrolledWindow(null, null);
-            page_vertical_adjustment = page.get_vadjustment();
+            page = new Gtk.ScrolledWindow (null, null);
+            page_vertical_adjustment = page.get_vadjustment ();
             page.expand = true;
-            page.get_style_context().add_class(Gtk.STYLE_CLASS_VIEW);
-            page.add(image);
-            page.scroll_event.connect(button_scroll_event);
+            page.get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
+            page.add (image);
+            page.scroll_event.connect (button_scroll_event);
             var page_context = page.get_style_context ();
             page_context.add_class ("aesop-page");
 
@@ -99,10 +99,10 @@ namespace Aesop {
 
             this.window_position = Gtk.WindowPosition.CENTER;
             this.add (grid);
-            this.set_icon_name("com.github.lainsce.aesop");
-            this.set_default_size(settings.width, settings.height);
+            this.set_icon_name ("com.github.lainsce.aesop");
+            this.set_default_size (settings.width, settings.height);
 
-            var toolbar = new Gtk.HeaderBar();
+            var toolbar = new Gtk.HeaderBar ();
             toolbar.title = this.title;
             toolbar.has_subtitle = false;
             toolbar.set_show_close_button (true);
@@ -121,14 +121,13 @@ namespace Aesop {
 
             var page_label = new Gtk.Label (_("Page:"));
             var page_button = new Gtk.SpinButton.with_range (1, settings.pages_total, 1);
-            page_button.set_value(page_count);
+            page_button.set_value (page_count);
             page_button.has_focus = false;
 
             page_button.value_changed.connect (() => {
                 int val = page_button.get_value_as_int ();
                 page_count = val;
-                
-                render_page();
+                render_page ();
             });
 
             var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 3);
@@ -138,15 +137,14 @@ namespace Aesop {
             toolbar.pack_start (open_button);
             toolbar.pack_end (box);
 
-            this.show_all();
+            this.show_all ();
 
             if (settings.last_file != "") {
-                File file = File.new_for_path(settings.last_file);
-                if (file.query_exists() == true) {
+                File file = File.new_for_path (settings.last_file);
+                if (file.query_exists () == true) {
                     filename = settings.last_file;
                     page_count = settings.last_page;
-                    
-                    render_page();
+                    render_page ();
                 }
             }
 
@@ -158,15 +156,12 @@ namespace Aesop {
             }
         }
 
-        public void open(File[] files, string hint) {
-            foreach (File f in files) {
-                filename = f.get_path();
-            }
+        public void open (File files, string hint) {
+            filename = files.get_path ();
             page_count = 1;
-            
-            render_page();
+            render_page ();
         }
-    
+
         // Mouse EventButton Scroll
         private bool button_scroll_event (Gdk.EventScroll event) {
             Gdk.ScrollDirection direction;
@@ -178,123 +173,119 @@ namespace Aesop {
             }
             return false;
         }
-    
-        private void action_zoom_plus() {
+
+        private void action_zoom_plus () {
             zoom = zoom + 0.25;
-            
-            render_page();
+            render_page ();
             var settings = AppSettings.get_default ();
             settings.zoom = zoom;
         }
-    
-        private void action_zoom_minus() {
+
+        private void action_zoom_minus () {
             if (zoom < 0.25) {
                 return;
             }
             zoom = zoom - 0.25;
-            
-            render_page();
+            render_page ();
             var settings = AppSettings.get_default ();
             settings.zoom = zoom;
         }
-    
-        private void action_previous_page() {
+
+        private void action_previous_page () {
             if (page_count < 2) {
                 return;
             }
             page_count--;
-            
-            render_page();
+
+            render_page ();
         }
-    
-        private void action_next_page() {
+
+        private void action_next_page () {
             var settings = AppSettings.get_default ();
             if (page_count > settings.pages_total) {
                 return;
             }
             page_count++;
-            
-            render_page();
-        }
-    
-        private void action_scroll_up() {
-            action_previous_page();
-        }
-    
-        private void action_scroll_down() {
-            action_next_page();
-        }
-    
-        private void action_full_screen_toggle() {
-            if ((this.get_window().get_state() & Gdk.WindowState.FULLSCREEN) == 0) {
-                this.fullscreen();
-            } else {
-                this.unfullscreen();
-            }
-        }
-    
-        private void action_open() {
-            show_open();
+
+            render_page ();
         }
 
-        public void show_open() {
-            var dialog = new Gtk.FileChooserDialog("Open", this,
+        private void action_scroll_up () {
+            action_previous_page ();
+        }
+
+        private void action_scroll_down () {
+            action_next_page ();
+        }
+
+        private void action_full_screen_toggle () {
+            if ((this.get_window ().get_state () & Gdk.WindowState.FULLSCREEN) == 0) {
+                this.fullscreen ();
+            } else {
+                this.unfullscreen ();
+            }
+        }
+
+        private void action_open () {
+            show_open ();
+        }
+
+        public void show_open () {
+            var dialog = new Gtk.FileChooserDialog ("Open", this,
                                                 Gtk.FileChooserAction.OPEN,
                                                 "Cancel", Gtk.ResponseType.CANCEL,
                                                 "Open",   Gtk.ResponseType.ACCEPT);
             if (filename != null) {
-                dialog.set_current_folder(Path.get_dirname(filename));
+                dialog.set_current_folder (Path.get_dirname (filename));
             }
-            dialog.set_select_multiple(false);
-            dialog.set_modal(true);
-            dialog.show();
-            if (dialog.run() == Gtk.ResponseType.ACCEPT) {
-                filename = dialog.get_filename();
+            dialog.set_select_multiple (false);
+            dialog.set_modal (true);
+            dialog.show ();
+            if (dialog.run () == Gtk.ResponseType.ACCEPT) {
+                filename = dialog.get_filename ();
                 page_count = 1;
-                this.render_page();
+                this.render_page ();
             }
-            dialog.destroy();
+            dialog.destroy ();
         }
 
-        public void render_page() {
+        public void render_page () {
             var settings = AppSettings.get_default ();
-            
             try {
-                document = new document.from_file(Filename.to_uri(filename), "");
-            } catch(Error e) {
+                document = new document.from_file (Filename.to_uri (filename), "");
+            } catch (Error e) {
                 error ("%s", e.message);
             }
 
-            total = document.get_n_pages();
+            total = document.get_n_pages ();
 
             // page size
             double page_width;
             double page_height;
-            var pages = document.get_page(page_count - 1);
-            pages.get_size(out page_width, out page_height);
+            var pages = document.get_page (page_count - 1);
+            pages.get_size (out page_width, out page_height);
 
             // image size
-            int width  = (int)(settings.zoom * page_width) ;
+            int width  = (int)(settings.zoom * page_width);
             int height = (int)(settings.zoom * page_height);
 
             // render page to cairo context
-            var surface = new Cairo.ImageSurface(Cairo.Format.ARGB32, width, height);
-            var context = new Cairo.Context(surface);
-            context.scale(settings.zoom, settings.zoom);
-            pages.render(context);
+            var surface = new Cairo.ImageSurface (Cairo.Format.ARGB32, width, height);
+            var context = new Cairo.Context (surface);
+            context.scale (settings.zoom, settings.zoom);
+            pages.render (context);
 
             // get pixbuf from surface
-            Gdk.Pixbuf pixbuf = Gdk.pixbuf_get_from_surface(surface, 0, 0, width, height);
+            Gdk.Pixbuf pixbuf = Gdk.pixbuf_get_from_surface (surface, 0, 0, width, height);
 
             // set title
-            this.set_title(("Aesop - %s (%d/%d)").printf(GLib.Path.get_basename(filename), page_count,
-                                                total));
+            this.set_title (("Aesop - %s (%d/%d)").printf (GLib.Path.get_basename (filename), page_count, total));
 
             // image from pixbuf
-            this.image.set_from_pixbuf(pixbuf);
+            this.image.set_from_pixbuf (pixbuf);
 
             // move scrollbar's adjustment
-            this.page.get_vadjustment().set_value(0);
+            this.page.get_vadjustment ().set_value (0);
 
             // save
             settings.last_file = filename;
@@ -314,9 +305,9 @@ namespace Aesop {
 
             return false;
         }
-    
+
         public override bool delete_event (Gdk.EventAny event) {
-            this.get_size(out width, out height);
+            this.get_size (out width, out height);
             var settings = AppSettings.get_default ();
             settings.width = width;
             settings.height = height;
