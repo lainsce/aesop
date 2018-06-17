@@ -30,5 +30,10 @@
       <summary>last-page</summary>
       <description>last-page</description>
     </key>
+    <key name="pages-total" type="i">
+      <default>1</default>
+      <summary>last-page</summary>
+      <description>last-page</description>
+    </key>
   </schema>
 </schemalist>

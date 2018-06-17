@@ -43,9 +43,7 @@ cc = meson.get_compiler('c')
 executable(
     meson.project_name(),
     'src/Application.vala',
-    'src/Dialogs.vala',
-    'src/PageZoom.vala',
-    'src/Viewer.vala',
+    'src/MainWindow.vala',
     'src/Constants/AppSettings.vala',
     asresources,
     c_args: c_args,

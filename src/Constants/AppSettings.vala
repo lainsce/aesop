@@ -23,6 +23,7 @@ namespace Aesop {
         public double zoom { get; set; }
         public string last_file { get; set; }
         public int last_page { get; set; }
+        public int pages_total { get; set; }
         
 
         private static AppSettings? instance;
