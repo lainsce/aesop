@@ -1,12 +1,12 @@
 <schemalist>
   <schema id="com.github.lainsce.aesop" path="/com/github/lainsce/aesop/">
     <key name="width" type="i">
-      <default>770</default>
+      <default>925</default>
       <summary>Width</summary>
       <description>Main window width</description>
     </key>
     <key name="height" type="i">
-      <default>540</default>
+      <default>925</default>
       <summary>Heigth</summary>
       <description>Main window heigth</description>
     </key>
