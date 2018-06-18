@@ -112,6 +112,7 @@ namespace Aesop {
             page = new Gtk.ScrolledWindow (null, null);
             page_vertical_adjustment = page.get_vadjustment ();
             page.expand = true;
+            page_count = 1;
             page.get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
             page.add (image);
 
@@ -290,9 +291,10 @@ namespace Aesop {
         }
 
         private void action_print () {
+            var settings = AppSettings.get_default ();
             var print_op = new Gtk.PrintOperation ();
-            print_op.set_n_pages (total);
-            print_op.draw_page.connect (render_page_for_print);
+            print_op.draw_page.connect (on_draw_page);
+            print_op.set_n_pages (document.get_n_pages ());
             try {
                 print_op.run (Gtk.PrintOperationAction.PRINT_DIALOG, this);
             } catch (Error e) {
@@ -339,42 +341,35 @@ namespace Aesop {
             return false;
         }
 
-        public void render_page_for_print () {
+        public void on_draw_page (Gtk.PrintContext context, int page_nr) {
             var settings = AppSettings.get_default ();
-            try {
-                document = new document.from_file (Filename.to_uri (filename), "");
-                total = document.get_n_pages ();
 
+            try {
+                document = new Poppler.Document.from_file (Filename.to_uri (filename), "");
+                print ("%d\n".printf (page_nr));
                 double page_width;
                 double page_height;
-                var pages = document.get_page (page_count - 1);
+                var pages = document.get_page (page_nr);
                 pages.get_size (out page_width, out page_height);
-
-                int width  = (int)(settings.zoom * page_width);
-                int height = (int)(settings.zoom * page_height);
 
                 if (settings.invert) {
                     debug ("Get dark!");
-                    var surface_dark = new Cairo.ImageSurface (Cairo.Format.ARGB32, width, height);
-                    var context_dark = new Cairo.Context (surface_dark);
+                    var context_dark = context.get_cairo_context ();
                     context_dark.set_operator (Cairo.Operator.DIFFERENCE);
                     context_dark.set_source_rgba (1, 1, 1, 1);
                     context_dark.rectangle (0, 0, page_width, page_height);
                     context_dark.paint ();
                     context_dark.scale (settings.zoom, settings.zoom);
-                    pages.render (context_dark);
                     context_dark.set_operator (Cairo.Operator.DIFFERENCE);
                     context_dark.set_source_rgba (1, 1, 1, 1);
                     context_dark.rectangle (0, 0, page_width, page_height);
                     context_dark.paint ();
-                    context_dark.show_page();
+                    pages.render (context_dark);
                 } else {
                     debug ("Get light!");
-                    var surface = new Cairo.ImageSurface (Cairo.Format.ARGB32, width, height);
-                    var context = new Cairo.Context (surface);
-                    context.scale (settings.zoom, settings.zoom);
-                    context.show_page();
-                    pages.render (context);
+                    var context_light = context.get_cairo_context ();
+                    context_light.scale (settings.zoom, settings.zoom);
+                    pages.render (context_light);
                 }
             } catch (Error e) {
                 warning ("%s", e.message);
@@ -385,13 +380,12 @@ namespace Aesop {
             var settings = AppSettings.get_default ();
             if (settings.last_file != null && filename != null) {
                 try {
-                    document = new document.from_file (Filename.to_uri (filename), "");
-                    total = document.get_n_pages ();
-
+                    document = new Poppler.Document.from_file (Filename.to_uri (filename), "");
                     double page_width;
                     double page_height;
                     var pages = document.get_page (page_count - 1);
                     pages.get_size (out page_width, out page_height);
+                    total = document.get_n_pages ();
 
                     int width  = (int)(settings.zoom * page_width);
                     int height = (int)(settings.zoom * page_height);

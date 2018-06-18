@@ -6,9 +6,11 @@
     <name>Aesop</name>
     <summary>The simplest PDF viewer around</summary>
     <description>
-        <p>Open up any PDF file and enjoy reading it from the comfort of this application</p>
+        <p>Open up any of your PDF files and enjoy reading it from the comfort of this application</p>
         <ul>
             <li>Quit anytime with the shortcut Ctrl + Q</li>
+            <li>Go fullscreen with F11</li>
+            <li>Print the current viewed document</li>
         </ul>
     </description>
     <provides>
