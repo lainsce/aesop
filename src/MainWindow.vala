@@ -26,6 +26,7 @@ namespace Aesop {
         public int width;
         public int height;
         public Granite.Widgets.Welcome welcome;
+        public Gtk.SpinButton page_button;
 
         public Gtk.Adjustment page_horizontal_adjustment;
         public Gtk.Adjustment page_vertical_adjustment;
@@ -58,8 +59,8 @@ namespace Aesop {
         public MainWindow (Gtk.Application application) {
             Object (application: application,
                     resizable: true,
-                    height_request: 925,
-                    width_request: 925);
+                    width_request: 780,
+                    height_request: 950);
 
             key_press_event.connect ((e) => {
                 uint keycode = e.hardware_keycode;
@@ -113,6 +114,7 @@ namespace Aesop {
             page.expand = true;
             page.get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
             page.add (image);
+
             var page_context = page.get_style_context ();
             page_context.add_class ("aesop-page");
 
@@ -163,7 +165,7 @@ namespace Aesop {
             });
 
             var page_label = new Gtk.Label (_("Page:"));
-            var page_button = new Gtk.SpinButton.with_range (1, settings.pages_total, 1);
+            page_button = new Gtk.SpinButton.with_range (1, settings.pages_total, 1);
             page_button.set_value (page_count);
             page_button.has_focus = false;
             page_button.valign = Gtk.Align.CENTER;
@@ -231,7 +233,7 @@ namespace Aesop {
             this.set_default_size (settings.width, settings.height);
             
             if (stack.get_visible_child_name () == "page") {
-                this.set_title (("Aesop - %s (%d/%d)").printf (GLib.Path.get_basename (settings.last_file), page_count, total));
+                this.set_title (("Aesop - %s").printf (GLib.Path.get_basename (settings.last_file)));
             } else {
                 this.set_title ("Aesop");
             }
@@ -259,19 +261,19 @@ namespace Aesop {
         private void action_previous_page () {
             if (page_count <= 1) {
                 return;
-            } else {
-               page_count = page_count - 1; 
             }
+            page_count = page_count - 1;
+            page_button.set_value (page_count);
             render_page ();
         }
 
         private void action_next_page () {
             var settings = AppSettings.get_default ();
-            if (page_count < settings.pages_total) {
-                page_count = page_count + 1;
-            } else if (page_count == settings.pages_total) {
+            if (page_count == settings.pages_total) {
                 return;
             }
+            page_count = page_count + 1;
+            page_button.set_value (page_count);
             render_page ();
         }
 
@@ -316,6 +318,25 @@ namespace Aesop {
                 this.render_page ();
             }
             dialog.destroy ();
+        }
+
+        public override bool scroll_event (Gdk.EventScroll scr) {
+            unowned Gdk.Device? device = scr.get_source_device ();
+
+            if ((device == null || (device.input_source != Gdk.InputSource.MOUSE && device.input_source != Gdk.InputSource.KEYBOARD))) {
+                return false;
+            }
+
+            switch (scr.direction.to_string ()) {
+                case "GDK_SCROLL_UP":
+                    action_previous_page ();
+                    break;
+                case "GDK_SCROLL_DOWN":
+                    action_next_page ();
+                    break;
+
+            }
+            return false;
         }
 
         public void render_page_for_print () {
@@ -374,6 +395,8 @@ namespace Aesop {
 
                     int width  = (int)(settings.zoom * page_width);
                     int height = (int)(settings.zoom * page_height);
+                    this.page.width_request = width;
+                    this.page.height_request = height;
 
                     if (settings.invert) {
                         debug ("Get dark!");
@@ -401,7 +424,7 @@ namespace Aesop {
                         this.image.set_from_pixbuf (pixbuf);
                     }
 
-                    this.set_title (("Aesop - %s (%d/%d)").printf (GLib.Path.get_basename (filename), page_count, total));
+                    this.set_title (("Aesop - %s").printf (GLib.Path.get_basename (filename)));
                     this.page.get_vadjustment ().set_value (0);
                 } catch (Error e) {
                     warning ("%s", e.message);
