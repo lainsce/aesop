@@ -10,6 +10,7 @@
         <ul>
             <li>Quit anytime with the shortcut Ctrl + Q</li>
             <li>Go fullscreen with F11</li>
+            <li>Open any PDF file from anywhere, even externally</li>
             <li>Print the current viewed document</li>
         </ul>
     </description>
@@ -54,6 +55,16 @@
         </screenshot>
     </screenshots>
     <releases>
+      <release version="1.0.1" date="2018-06-29">
+          <description>
+              <p>Release: Ecofriendly Printing</p>
+              <ul>
+                  <li>Fixed inverted view printing black pages instead of the actual document.</li>
+                  <li>Open PDFs externally.</li>
+                  <li>Added a way to zoom in/out in the main menu.</li>
+              </ul>
+          </description>
+      </release>
       <release version="1.0.0" date="2018-06-22">
           <description>
               <p>Release: Come Hither and Read</p>

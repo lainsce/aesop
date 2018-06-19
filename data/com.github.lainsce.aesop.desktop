@@ -2,9 +2,10 @@
 Name=Aesop
 Comment=The simplest PDF viewer around
 Comment[pt_BR]=O mais simples leitor de PDF por aí
-Exec=com.github.lainsce.aesop
+Exec=com.github.lainsce.aesop %U
 Icon=com.github.lainsce.aesop
 Keywords=PDF;Document;Viewer;
+MimeType=application/pdf;
 Terminal=false
 Type=Application
 StartupNotify=true

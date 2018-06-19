@@ -10,3 +10,6 @@ if not os.environ.get('DESTDIR'):
 
     print('Rebuilding desktop icons cache...')
     subprocess.call(['gtk-update-icon-cache', '/usr/share/icons/hicolor/'], shell=False)
+
+    print('Recaching mimetype handlers...')
+    subprocess.call(['update-desktop-database'], shell=False)

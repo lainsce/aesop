@@ -16,3 +16,11 @@
     border-width: 6px 6px 9px 7px;
     border-image: url("resource:///com/github/lainsce/aesop/thumbnail-frame.png") 3 3 6 4;
 }
+
+.aesop-image-dark {
+    background: #000000;
+}
+
+.aesop-image-light {
+    background: #FFFFFF;
+}

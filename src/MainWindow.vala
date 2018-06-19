@@ -20,6 +20,8 @@ namespace Aesop {
         public Gtk.ScrolledWindow page;
         public Poppler.Document document;
         public double zoom;
+        public double SIZE_MAX = 2.00;
+        public double SIZE_MIN = 0.25;
         public string filename;
         public int page_count;
         public int total;
@@ -36,8 +38,9 @@ namespace Aesop {
         private ModeSwitch mode_switch;
 
         public const string ACTION_PREFIX = "win.";
-        public const string ACTION_ZOOM_PLUS = "action_zoom_plus";
-        public const string ACTION_ZOOM_MINUS = "action_zoom_minus";
+        public const string ACTION_ZOOM_IN = "action_zoom_in";
+        public const string ACTION_ZOOM_DEFAULT = "action_zoom_default";
+        public const string ACTION_ZOOM_OUT = "action_zoom_out";
         public const string ACTION_SCROLL_UP = "action_scroll_up";
         public const string ACTION_SCROLL_DOWN = "action_scroll_down";
         public const string ACTION_FULLSCREEN = "action_fullscreen";
@@ -47,8 +50,9 @@ namespace Aesop {
         public static Gee.MultiMap<string, string> action_accelerators = new Gee.HashMultiMap<string, string> ();
 
         private const GLib.ActionEntry[] action_entries = {
-            { ACTION_ZOOM_PLUS,            action_zoom_plus            },
-            { ACTION_ZOOM_MINUS,           action_zoom_minus           },
+            { ACTION_ZOOM_IN,              action_zoom_in              },
+            { ACTION_ZOOM_DEFAULT,         action_zoom_default         },
+            { ACTION_ZOOM_OUT,             action_zoom_out             },
             { ACTION_SCROLL_UP,            action_previous_page        },
             { ACTION_SCROLL_DOWN,          action_next_page            },
             { ACTION_FULLSCREEN,           action_full_screen_toggle   },
@@ -59,19 +63,19 @@ namespace Aesop {
         public MainWindow (Gtk.Application application) {
             Object (application: application,
                     resizable: true,
-                    width_request: 780,
-                    height_request: 950);
+                    width_request: 785,
+                    height_request: 900);
 
             key_press_event.connect ((e) => {
                 uint keycode = e.hardware_keycode;
                 if ((e.state) != 0) {
                     if (match_keycode (Gdk.Key.plus, keycode)) {
-                        action_zoom_plus ();
+                        action_zoom_in ();
                     }
                 }
                 if ((e.state & Gdk.ModifierType.CONTROL_MASK) != 0) {
                     if (match_keycode (Gdk.Key.minus, keycode)) {
-                        action_zoom_minus ();
+                        action_zoom_out ();
                     }
                 }
                 if ((e.state & Gdk.ModifierType.CONTROL_MASK) != 0) {
@@ -113,6 +117,7 @@ namespace Aesop {
             page_vertical_adjustment = page.get_vadjustment ();
             page.expand = true;
             page_count = 1;
+            zoom = 1.00;
             page.get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
             page.add (image);
 
@@ -185,11 +190,33 @@ namespace Aesop {
             print_button.text = (_("Print…"));
             print_button.action_name = ACTION_PREFIX + ACTION_PRINT;
 
+            var zoom_out_button = new Gtk.Button.from_icon_name ("zoom-out-symbolic", Gtk.IconSize.MENU);
+            zoom_out_button.action_name = ACTION_PREFIX + ACTION_ZOOM_OUT;
+            zoom_out_button.tooltip_text = _("Zoom Out");
+
+            var zoom_default_button = new Gtk.Button.with_label ("100%");
+            zoom_default_button.action_name = ACTION_PREFIX + ACTION_ZOOM_DEFAULT;
+            zoom_default_button.tooltip_text = _("Zoom 1:1");
+
+            var zoom_in_button = new Gtk.Button.from_icon_name ("zoom-in-symbolic", Gtk.IconSize.MENU);
+            zoom_in_button.action_name = ACTION_PREFIX + ACTION_ZOOM_IN;
+            zoom_in_button.tooltip_text = _("Zoom In");
+
+            var size_grid = new Gtk.Grid ();
+            size_grid.column_homogeneous = true;
+            size_grid.hexpand = true;
+            size_grid.margin = 6;
+            size_grid.get_style_context ().add_class (Gtk.STYLE_CLASS_LINKED);
+            size_grid.add (zoom_out_button);
+            size_grid.add (zoom_default_button);
+            size_grid.add (zoom_in_button);
+
             var menu_grid = new Gtk.Grid ();
             menu_grid.margin = 6;
             menu_grid.row_spacing = 6;
             menu_grid.column_spacing = 12;
             menu_grid.orientation = Gtk.Orientation.VERTICAL;
+            menu_grid.add (size_grid);
             menu_grid.add (print_button);
             menu_grid.show_all ();
 
@@ -242,21 +269,41 @@ namespace Aesop {
             this.show_all ();
         }
 
-        private void action_zoom_plus () {
-            zoom = zoom + 0.25;
-            render_page ();
-            var settings = AppSettings.get_default ();
-            settings.zoom = zoom;
+        public void action_zoom_default () {
+            do_zoom ("reset");
         }
 
-        private void action_zoom_minus () {
-            if (zoom < 0.25) {
-                return;
+        public void action_zoom_in () {
+            do_zoom ("up");
+        }
+
+        public void action_zoom_out () {
+            do_zoom ("down");
+        }
+
+        private void do_zoom (string direction) {
+            if (direction == "down") {
+                if (zoom < SIZE_MIN) {
+                    return;
+                }
+                zoom = zoom - 0.25;
+                render_page ();
+                var settings = AppSettings.get_default ();
+                settings.zoom = zoom;
+            } else if (direction == "up") {
+                if (zoom > SIZE_MAX) {
+                    return;
+                }
+                zoom = zoom + 0.25;
+                render_page ();
+                var settings = AppSettings.get_default ();
+                settings.zoom = zoom;
+            } else if (direction == "reset") {
+                zoom = 1.00;
+                render_page ();
+                var settings = AppSettings.get_default ();
+                settings.zoom = zoom;
             }
-            zoom = zoom - 0.25;
-            render_page ();
-            var settings = AppSettings.get_default ();
-            settings.zoom = zoom;
         }
 
         private void action_previous_page () {
@@ -291,7 +338,6 @@ namespace Aesop {
         }
 
         private void action_print () {
-            var settings = AppSettings.get_default ();
             var print_op = new Gtk.PrintOperation ();
             print_op.draw_page.connect (on_draw_page);
             print_op.set_n_pages (document.get_n_pages ());
@@ -352,25 +398,9 @@ namespace Aesop {
                 var pages = document.get_page (page_nr);
                 pages.get_size (out page_width, out page_height);
 
-                if (settings.invert) {
-                    debug ("Get dark!");
-                    var context_dark = context.get_cairo_context ();
-                    context_dark.set_operator (Cairo.Operator.DIFFERENCE);
-                    context_dark.set_source_rgba (1, 1, 1, 1);
-                    context_dark.rectangle (0, 0, page_width, page_height);
-                    context_dark.paint ();
-                    context_dark.scale (settings.zoom, settings.zoom);
-                    context_dark.set_operator (Cairo.Operator.DIFFERENCE);
-                    context_dark.set_source_rgba (1, 1, 1, 1);
-                    context_dark.rectangle (0, 0, page_width, page_height);
-                    context_dark.paint ();
-                    pages.render (context_dark);
-                } else {
-                    debug ("Get light!");
-                    var context_light = context.get_cairo_context ();
-                    context_light.scale (settings.zoom, settings.zoom);
-                    pages.render (context_light);
-                }
+                var context_light = context.get_cairo_context ();
+                context_light.scale (settings.zoom, settings.zoom);
+                pages.render (context_light);
             } catch (Error e) {
                 warning ("%s", e.message);
             }
@@ -389,8 +419,6 @@ namespace Aesop {
 
                     int width  = (int)(settings.zoom * page_width);
                     int height = (int)(settings.zoom * page_height);
-                    this.page.width_request = width;
-                    this.page.height_request = height;
 
                     if (settings.invert) {
                         debug ("Get dark!");
@@ -408,6 +436,9 @@ namespace Aesop {
                         context_dark.paint ();
                         Gdk.Pixbuf pixbuf_dark = Gdk.pixbuf_get_from_surface (surface_dark, 0, 0, width, height);
                         this.image.set_from_pixbuf (pixbuf_dark);
+                        var image_context = image.get_style_context ();
+                        image_context.add_class ("aesop-image-dark");
+                        image_context.remove_class ("aesop-image-light");
                     } else {
                         debug ("Get light!");
                         var surface = new Cairo.ImageSurface (Cairo.Format.ARGB32, width, height);
@@ -416,6 +447,9 @@ namespace Aesop {
                         pages.render (context);
                         Gdk.Pixbuf pixbuf = Gdk.pixbuf_get_from_surface (surface, 0, 0, width, height);
                         this.image.set_from_pixbuf (pixbuf);
+                        var image_context = image.get_style_context ();
+                        image_context.remove_class ("aesop-image-dark");
+                        image_context.add_class ("aesop-image-light");
                     }
 
                     this.set_title (("Aesop - %s").printf (GLib.Path.get_basename (filename)));
@@ -453,6 +487,7 @@ namespace Aesop {
             var settings = AppSettings.get_default ();
             settings.width = width;
             settings.height = height;
+            settings.zoom = zoom;
             settings.last_page = page_count;
             settings.last_file = filename;
             settings.pages_total = total;
