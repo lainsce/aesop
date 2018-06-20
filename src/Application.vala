@@ -180,7 +180,7 @@ namespace Aesop {
                 var settings = AppSettings.get_default ();
                 settings.last_file = file.get_path ();
     
-                window.filename = settings.last_file;
+                window.filename = file.get_path ();
                 window.page_count = 1;
                 window.render_page ();
             }
