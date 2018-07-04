@@ -18,8 +18,10 @@ namespace Aesop {
     public class MainWindow : Gtk.Window {
         public Gtk.Image image;
         public Gtk.ScrolledWindow page;
+        public Gtk.Stack stack;
+        public Gtk.Box page_box;
         public Poppler.Document document;
-        public double zoom;
+        public double zoom = 1.00;
         public double SIZE_MAX = 2.00;
         public double SIZE_MIN = 0.25;
         public string filename;
@@ -29,8 +31,6 @@ namespace Aesop {
         public int height;
         public Granite.Widgets.Welcome welcome;
         public Gtk.SpinButton page_button;
-
-        public Gtk.Adjustment page_horizontal_adjustment;
         public Gtk.Adjustment page_vertical_adjustment;
 
         private const string LIGHT_ICON_SYMBOLIC = "display-brightness-symbolic";
@@ -63,8 +63,8 @@ namespace Aesop {
         public MainWindow (Gtk.Application application) {
             Object (application: application,
                     resizable: true,
-                    width_request: 785,
-                    height_request: 900);
+                    default_width: 600,
+                    default_height: 800);
 
             key_press_event.connect ((e) => {
                 uint keycode = e.hardware_keycode;
@@ -115,26 +115,25 @@ namespace Aesop {
             image = new Gtk.Image ();
             page = new Gtk.ScrolledWindow (null, null);
             page_vertical_adjustment = page.get_vadjustment ();
-            page.expand = true;
-            page_count = 1;
-            zoom = 1.00;
-            page.get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
             page.add (image);
-
             var page_context = page.get_style_context ();
             page_context.add_class ("aesop-page");
 
-            var stack = new Gtk.Stack ();
+            page_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+            page_box.pack_start (page, false, false, 0);
+            page_box.set_valign (Gtk.Align.CENTER);
+
+            stack = new Gtk.Stack ();
             stack.add_named (welcome, "welcome");
-            stack.add_named (page, "page");
+            stack.add_named (page_box, "page_box");
 
             if (settings.last_file != null) {
-				welcome.hide();
-                page.show();
+                page_box.show ();
+                welcome.hide ();
                 render_page ();
 			} else {
-				welcome.show();
-				page.hide();
+                welcome.show ();
+                page_box.hide ();
             }
 
             var toolbar = new Gtk.HeaderBar ();
@@ -151,8 +150,8 @@ namespace Aesop {
 
             open_button.clicked.connect (() => {
                 action_open ();
-                welcome.hide();
-				page.show();
+				page_box.show ();
+                welcome.hide ();
             });
 
             mode_switch = new ModeSwitch (LIGHT_ICON_SYMBOLIC, DARK_ICON_SYMBOLIC);
@@ -171,7 +170,7 @@ namespace Aesop {
             });
 
             var page_label = new Gtk.Label (_("Page:"));
-            page_button = new Gtk.SpinButton.with_range (1, settings.pages_total, 1);
+            page_button = new Gtk.SpinButton.with_range (1.00, settings.pages_total, 1.00);
             page_button.set_value (page_count);
             page_button.has_focus = false;
             page_button.valign = Gtk.Align.CENTER;
@@ -420,6 +419,14 @@ namespace Aesop {
                     int width  = (int)(settings.zoom * page_width);
                     int height = (int)(settings.zoom * page_height);
 
+                    // 20 here is margins.
+                    page.width_request = (int) page_width + 20;
+                    page.height_request = (int) page_height + 20;
+                    this.width_request = width / 2;
+                    this.height_request = height / 2;
+                    page.set_halign (Gtk.Align.CENTER);
+                    page.set_valign (Gtk.Align.CENTER);
+
                     if (settings.invert) {
                         debug ("Get dark!");
                         var surface_dark = new Cairo.ImageSurface (Cairo.Format.ARGB32, width, height);
@@ -457,15 +464,15 @@ namespace Aesop {
                 } catch (Error e) {
                     warning ("%s", e.message);
                 }
+                page_box.show ();
                 welcome.hide ();
-                page.show ();
 
                 settings.last_file = filename;
                 settings.last_page = page_count;
                 settings.pages_total = total;
             } else {
                 welcome.show ();
-                page.hide ();
+                page_box.hide ();
             }
         }
 

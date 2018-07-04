@@ -1,3 +1,11 @@
+com.github.lainsce.aesop (1.0.3) xenial; urgency=low
+
+  * Fixed page jumper not showing certain pages.
+  * Fix the size of the virtual page to fit within the PDF's sizes.
+  * Fix maximization on small screens.
+
+ -- Lains <lainsce@airmail.cc>  Wed, 04 Jun 2018 01:06:00 -0300
+
 com.github.lainsce.aesop (1.0.1) xenial; urgency=low
 
   * Fixed inverted view printing black pages instead of the actual document.

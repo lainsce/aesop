@@ -20,7 +20,7 @@
     <developer_name>Lains</developer_name>
     <url type="homepage">https://github.com/lainsce/aesop/</url>
     <url type="bugtracker">https://github.com/lainsce/aesop/issues</url>
-        <content_rating type="oars-1.1">
+    <content_rating type="oars-1.1">
         <content_attribute id="violence-cartoon">none</content_attribute>
         <content_attribute id="violence-fantasy">none</content_attribute>
         <content_attribute id="violence-realistic">none</content_attribute>
@@ -55,6 +55,16 @@
         </screenshot>
     </screenshots>
     <releases>
+      <release version="1.0.3" date="2018-07-04">
+          <description>
+              <p>Release: Fireworks Inkblot</p>
+              <ul>
+                  <li>Fixed page jumper not showing certain pages.</li>
+                  <li>Fix the size of the virtual page to fit within the PDF's sizes.</li>
+                  <li>Fix maximization on small screens.</li>
+              </ul>
+          </description>
+      </release>
       <release version="1.0.1" date="2018-06-22">
           <description>
               <p>Release: Ecofriendly Printing</p>
