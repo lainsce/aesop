@@ -36,3 +36,8 @@ meson build && cd build
 meson configure -Dprefix=/usr
 sudo ninja install
 ```
+
+## Arch Linux
+Arch Linux users can find Aesop under the name [aesop-git](https://aur.archlinux.org/packages/aesop-git/) in the **AUR**:
+
+`$ pikaur -S aesop-git`
