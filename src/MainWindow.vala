@@ -20,6 +20,7 @@ namespace Aesop {
         public Gtk.ScrolledWindow page;
         public Gtk.Stack stack;
         public Gtk.Box page_box;
+        public Gtk.Box page_button_box;
         public Poppler.Document document;
         public double zoom = 1.00;
         public double SIZE_MAX = 2.00;
@@ -181,9 +182,10 @@ namespace Aesop {
                 render_page ();
             });
 
-            var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-            box.pack_start (page_label, false, false, 0);
-            box.pack_start (page_button, false, false, 6);
+            page_button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+            page_button_box.set_sensitive (false);
+            page_button_box.pack_start (page_label, false, false, 0);
+            page_button_box.pack_start (page_button, false, false, 6);
 
             var print_button = new Gtk.ModelButton ();
             print_button.text = (_("Print…"));
@@ -229,7 +231,7 @@ namespace Aesop {
             menu_button.popover = menu;
 
             toolbar.pack_start (open_button);
-            toolbar.pack_start (box);
+            toolbar.pack_start (page_button_box);
             toolbar.pack_end (menu_button);
             toolbar.pack_end (mode_switch);
 
@@ -249,6 +251,7 @@ namespace Aesop {
                 if (file.query_exists () == true) {
                     filename = settings.last_file;
                     page_count = settings.last_page;
+                    page_button_box.set_sensitive (true);
                     render_page ();
                 }
             }
@@ -258,8 +261,8 @@ namespace Aesop {
             this.set_titlebar (toolbar);
             this.set_icon_name ("com.github.lainsce.aesop");
             this.set_default_size (settings.width, settings.height);
-            
-            if (stack.get_visible_child_name () == "page") {
+
+            if (stack.get_visible_child_name () == "page_box") {
                 this.set_title (("Aesop - %s").printf (GLib.Path.get_basename (settings.last_file)));
             } else {
                 this.set_title ("Aesop");
@@ -466,6 +469,7 @@ namespace Aesop {
                 }
                 page_box.show ();
                 welcome.hide ();
+                page_button_box.set_sensitive (true);
 
                 settings.last_file = filename;
                 settings.last_page = page_count;

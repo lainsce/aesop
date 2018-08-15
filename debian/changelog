@@ -1,3 +1,9 @@
+com.github.lainsce.aesop (1.0.4) xenial; urgency=low
+
+  * Fixed page jumper not being greyed out when no PDF is loaded.
+
+ -- Lains <lainsce@airmail.cc>  Wed, 15 Aug 2018 10:26:00 -0300
+
 com.github.lainsce.aesop (1.0.3) xenial; urgency=low
 
   * Fixed page jumper not showing certain pages.
