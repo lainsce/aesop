@@ -1,0 +1,27 @@
+com.github.lainsce.aesop (1.0.4) xenial; urgency=low
+
+  * Fixed page jumper not being greyed out when no PDF is loaded.
+
+ -- Lains <lainsce@airmail.cc>  Wed, 15 Aug 2018 10:26:00 -0300
+
+com.github.lainsce.aesop (1.0.3) xenial; urgency=low
+
+  * Fixed page jumper not showing certain pages.
+  * Fix the size of the virtual page to fit within the PDF's sizes.
+  * Fix maximization on small screens.
+
+ -- Lains <lainsce@airmail.cc>  Wed, 04 Jun 2018 01:06:00 -0300
+
+com.github.lainsce.aesop (1.0.1) xenial; urgency=low
+
+  * Fixed inverted view printing black pages instead of the actual document.
+  * Open PDFs externally.
+  * Added zoom widget on the main menu.
+
+ -- Lains <lainsce@airmail.cc>  Fri, 22 Jun 2018 12:32:00 -0300
+
+com.github.lainsce.aesop (1.0.0) xenial; urgency=low
+
+  * Initial Release.
+
+ -- Lains <lainsce@airmail.cc>  Fri, 22 Jun 2018 18:32:00 -0300
