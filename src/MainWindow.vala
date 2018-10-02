@@ -67,9 +67,14 @@ namespace Aesop {
 
             key_press_event.connect ((e) => {
                 uint keycode = e.hardware_keycode;
-                if ((e.state) != 0) {
+                if ((e.state & Gdk.ModifierType.CONTROL_MASK) != 0) {
                     if (match_keycode (Gdk.Key.plus, keycode)) {
                         action_zoom_in ();
+                    }
+                    if ((e.state & Gdk.ModifierType.SHIFT_MASK) != 0) {
+                        if (match_keycode (Gdk.Key.equal, keycode)) {
+                            action_zoom_in ();
+                        }
                     }
                 }
                 if ((e.state & Gdk.ModifierType.CONTROL_MASK) != 0) {
