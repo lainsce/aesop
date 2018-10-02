@@ -1,6 +1,6 @@
 # Name our project
 project('com.github.lainsce.aesop', ['vala', 'c'],
-    version: '1.0.4'
+    version: '1.0.5'
 )
 
 # Import main lib files
@@ -44,7 +44,7 @@ executable(
     meson.project_name(),
     'src/Application.vala',
     'src/MainWindow.vala',
-    'src/Widgets/ModeSwitch.vala',
+    'src/Widgets/LivemodeButton.vala',
     'src/Constants/AppSettings.vala',
     asresources,
     c_args: c_args,

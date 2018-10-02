@@ -20,6 +20,11 @@
       <summary>Invert</summary>
       <description>Main window inverted</description>
     </key>
+    <key name="live-mode" type="b">
+      <default>false</default>
+      <summary>Live Mode</summary>
+      <description>Continue rendering the page</description>
+    </key>
     <key name="zoom" type="d">
       <default>1.00</default>
       <summary>Zoom</summary>
@@ -29,7 +34,7 @@
       <default>""</default>
       <summary>last-file</summary>
       <description>last-file</description>
-    </key>    
+    </key>
     <key name="last-page" type="i">
       <default>1</default>
       <summary>last-page</summary>

@@ -21,11 +21,12 @@ namespace Aesop {
         public int height { get; set; }
         public bool maximized { get; set; }
         public bool invert { get; set; }
+        public bool live_mode { get; set; }
         public double zoom { get; set; }
         public string last_file { get; set; }
         public int last_page { get; set; }
         public int pages_total { get; set; }
-        
+
 
         private static AppSettings? instance;
         public static unowned AppSettings get_default () {

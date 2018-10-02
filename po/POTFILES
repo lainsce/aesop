@@ -1,5 +1,3 @@
 src/Application.vala
-src/Dialogs.vala
-src/PageZoom.vala
-src/Viewer.vala
+src/MainWindow.vala
 src/Constants/AppSettings.vala

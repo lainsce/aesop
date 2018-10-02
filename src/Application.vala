@@ -137,7 +137,7 @@ namespace Aesop {
                                 reason = ("It is a directory.");
                                 break;
                             case FileType.SPECIAL:
-                                reason = ("It is a \"special\" file such as a socket,\n fifo, block device, or character device.");
+                                reason = ("It is a \"special\" system file.");
                                 break;
                             default:
                                 reason = ("It is an \"unknown\" file type.");
@@ -154,12 +154,13 @@ namespace Aesop {
 
                     // Notify the user that something happened.
                     if (msg.length > 0) {
-                        var parent_window = get_last_window () as Gtk.Window;
-                        var dialog = new Gtk.MessageDialog.with_markup (parent_window,
-                            Gtk.DialogFlags.MODAL,
-                            Gtk.MessageType.ERROR,
-                            Gtk.ButtonsType.CLOSE,
-                            msg);
+                        var dialog = new Granite.MessageDialog.with_image_from_icon_name (
+                            "File couldn't be accessed",
+                            msg,
+                            "dialog-error",
+                            Gtk.ButtonsType.CLOSE
+                        );
+
                         dialog.run ();
                         dialog.destroy ();
                         dialog.close ();
@@ -179,7 +180,7 @@ namespace Aesop {
                 var file = files[0];
                 var settings = AppSettings.get_default ();
                 settings.last_file = file.get_path ();
-    
+
                 window.filename = file.get_path ();
                 window.page_count = 1;
                 window.render_page ();

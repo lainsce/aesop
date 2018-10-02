@@ -22,6 +22,7 @@ namespace Aesop {
         public Gtk.Box page_box;
         public Gtk.Box page_button_box;
         public Poppler.Document document;
+        public LiveModeButton livemode_button;
         public double zoom = 1.00;
         public double SIZE_MAX = 2.00;
         public double SIZE_MIN = 0.25;
@@ -33,10 +34,7 @@ namespace Aesop {
         public Granite.Widgets.Welcome welcome;
         public Gtk.SpinButton page_button;
         public Gtk.Adjustment page_vertical_adjustment;
-
-        private const string LIGHT_ICON_SYMBOLIC = "display-brightness-symbolic";
-        private const string DARK_ICON_SYMBOLIC = "weather-clear-night-symbolic";
-        private ModeSwitch mode_switch;
+        public Granite.ModeSwitch mode_switch;
 
         public const string ACTION_PREFIX = "win.";
         public const string ACTION_ZOOM_IN = "action_zoom_in";
@@ -64,7 +62,7 @@ namespace Aesop {
         public MainWindow (Gtk.Application application) {
             Object (application: application,
                     resizable: true,
-                    default_width: 600,
+                    default_width: 630,
                     default_height: 800);
 
             key_press_event.connect ((e) => {
@@ -155,8 +153,12 @@ namespace Aesop {
                 welcome.hide ();
             });
 
-            mode_switch = new ModeSwitch (LIGHT_ICON_SYMBOLIC, DARK_ICON_SYMBOLIC);
+            mode_switch = new Granite.ModeSwitch.from_icon_name ("display-brightness-symbolic", "weather-clear-night-symbolic");
+            mode_switch.primary_icon_tooltip_text = ("Light background");
+            mode_switch.secondary_icon_tooltip_text = ("Dark background");
             mode_switch.valign = Gtk.Align.CENTER;
+            mode_switch.has_focus = false;
+            mode_switch.set_sensitive (false);
 
             mode_switch.notify["active"].connect (() => {
                 if (mode_switch.active) {
@@ -191,6 +193,9 @@ namespace Aesop {
             print_button.text = (_("Print…"));
             print_button.action_name = ACTION_PREFIX + ACTION_PRINT;
 
+            livemode_button = new LiveModeButton ();
+            livemode_button.tooltip_text = "Reload the pdf every 30s.";
+
             var zoom_out_button = new Gtk.Button.from_icon_name ("zoom-out-symbolic", Gtk.IconSize.MENU);
             zoom_out_button.action_name = ACTION_PREFIX + ACTION_ZOOM_OUT;
             zoom_out_button.tooltip_text = _("Zoom Out");
@@ -218,6 +223,7 @@ namespace Aesop {
             menu_grid.column_spacing = 12;
             menu_grid.orientation = Gtk.Orientation.VERTICAL;
             menu_grid.add (size_grid);
+            menu_grid.add (livemode_button);
             menu_grid.add (print_button);
             menu_grid.show_all ();
 
@@ -252,6 +258,7 @@ namespace Aesop {
                     filename = settings.last_file;
                     page_count = settings.last_page;
                     page_button_box.set_sensitive (true);
+                    mode_switch.set_sensitive (true);
                     render_page ();
                 }
             }
@@ -470,6 +477,7 @@ namespace Aesop {
                 page_box.show ();
                 welcome.hide ();
                 page_button_box.set_sensitive (true);
+                mode_switch.set_sensitive (true);
 
                 settings.last_file = filename;
                 settings.last_page = page_count;

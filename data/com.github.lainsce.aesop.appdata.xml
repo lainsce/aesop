@@ -55,6 +55,14 @@
         </screenshot>
     </screenshots>
     <releases>
+      <release version="1.0.5" date="2018-10-05">
+          <description>
+              <p>Release: Page Marker</p>
+              <ul>
+                  <li>Added new "Live Mode" setting in the preferences menu.</li>
+              </ul>
+          </description>
+      </release>
       <release version="1.0.4" date="2018-08-15">
           <description>
               <p>Release: Page Marker</p>
