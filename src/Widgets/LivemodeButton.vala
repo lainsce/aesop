@@ -19,7 +19,7 @@
  */
 
 namespace Aesop {
-public class LiveModeButton : Gtk.Bin {
+    public class Widgets.LiveModeButton : Gtk.Bin {
         public Gtk.ModelButton button;
         public MainWindow win;
 
@@ -34,7 +34,7 @@ public class LiveModeButton : Gtk.Bin {
                 if (win != null) {
                     if (settings.live_mode == true) {
                         Timeout.add_seconds (30, () => {
-                            win.render_page ();
+                            win.render_page.begin ();
                             return false;
                         });
                     }

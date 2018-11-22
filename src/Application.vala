@@ -183,7 +183,7 @@ namespace Aesop {
 
                 window.filename = file.get_path ();
                 window.page_count = 1;
-                window.render_page ();
+                window.render_page.begin ();
             }
             return true;
         }

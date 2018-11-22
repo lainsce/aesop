@@ -22,13 +22,12 @@ namespace Aesop {
         public Gtk.Box page_box;
         public Gtk.Box page_button_box;
         public Poppler.Document document;
-        public LiveModeButton livemode_button;
         public double zoom = 1.00;
         public double SIZE_MAX = 2.00;
         public double SIZE_MIN = 0.25;
         public string filename;
-        public int page_count;
-        public int total;
+        public int page_count = 1;
+        public int total = 1;
         public int width;
         public int height;
         public Granite.Widgets.Welcome welcome;
@@ -134,7 +133,7 @@ namespace Aesop {
             if (settings.last_file != null) {
                 page_box.show ();
                 welcome.hide ();
-                render_page ();
+                render_page.begin ();
 			} else {
                 welcome.show ();
                 page_box.hide ();
@@ -169,11 +168,11 @@ namespace Aesop {
                 if (mode_switch.active) {
                     debug ("Get dark!");
                     settings.invert = true;
-                    render_page ();
+                    render_page.begin ();
                 } else {
                     debug ("Get light!");
                     settings.invert = false;
-                    render_page ();
+                    render_page.begin ();
                 }
             });
 
@@ -186,7 +185,7 @@ namespace Aesop {
             page_button.value_changed.connect (() => {
                 int val = page_button.get_value_as_int ();
                 page_count = val;
-                render_page ();
+                render_page.begin ();
             });
 
             page_button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
@@ -198,7 +197,7 @@ namespace Aesop {
             print_button.text = (_("Print…"));
             print_button.action_name = ACTION_PREFIX + ACTION_PRINT;
 
-            livemode_button = new LiveModeButton ();
+            var livemode_button = new Widgets.LiveModeButton ();
             livemode_button.tooltip_text = "Reload the pdf every 30s.";
 
             var zoom_out_button = new Gtk.Button.from_icon_name ("zoom-out-symbolic", Gtk.IconSize.MENU);
@@ -254,7 +253,7 @@ namespace Aesop {
             }
 
             settings.changed.connect (() => {
-                render_page ();
+                render_page.begin ();
             });
 
             if (settings.last_file != "") {
@@ -264,7 +263,7 @@ namespace Aesop {
                     page_count = settings.last_page;
                     page_button_box.set_sensitive (true);
                     mode_switch.set_sensitive (true);
-                    render_page ();
+                    render_page.begin ();
                 }
             }
 
@@ -301,7 +300,7 @@ namespace Aesop {
                     return;
                 }
                 zoom = zoom - 0.25;
-                render_page ();
+                render_page.begin ();
                 var settings = AppSettings.get_default ();
                 settings.zoom = zoom;
             } else if (direction == "up") {
@@ -309,12 +308,12 @@ namespace Aesop {
                     return;
                 }
                 zoom = zoom + 0.25;
-                render_page ();
+                render_page.begin ();
                 var settings = AppSettings.get_default ();
                 settings.zoom = zoom;
             } else if (direction == "reset") {
                 zoom = 1.00;
-                render_page ();
+                render_page.begin ();
                 var settings = AppSettings.get_default ();
                 settings.zoom = zoom;
             }
@@ -326,7 +325,7 @@ namespace Aesop {
             }
             page_count = page_count - 1;
             page_button.set_value (page_count);
-            render_page ();
+            render_page.begin ();
         }
 
         private void action_next_page () {
@@ -336,7 +335,7 @@ namespace Aesop {
             }
             page_count = page_count + 1;
             page_button.set_value (page_count);
-            render_page ();
+            render_page.begin ();
         }
 
         private void action_full_screen_toggle () {
@@ -373,11 +372,13 @@ namespace Aesop {
             }
             dialog.set_select_multiple (false);
             dialog.set_modal (true);
+            page_count = 1;
             dialog.show ();
             if (dialog.run () == Gtk.ResponseType.ACCEPT) {
                 filename = dialog.get_filename ();
-                page_count = 1;
-                this.render_page ();
+                settings.last_file = filename;
+                settings.last_page = this.total;
+                render_page.begin ();
             }
             dialog.destroy ();
         }
@@ -401,7 +402,7 @@ namespace Aesop {
             return false;
         }
 
-        public void on_draw_page (Gtk.PrintContext context, int page_nr) {
+        public async void on_draw_page (Gtk.PrintContext context, int page_nr) {
             var settings = AppSettings.get_default ();
 
             try {
@@ -420,7 +421,7 @@ namespace Aesop {
             }
         }
 
-        public void render_page () {
+        public async void render_page () {
             var settings = AppSettings.get_default ();
             if (settings.last_file != null && filename != null) {
                 try {
@@ -429,7 +430,8 @@ namespace Aesop {
                     double page_height;
                     var pages = document.get_page (page_count - 1);
                     pages.get_size (out page_width, out page_height);
-                    total = document.get_n_pages ();
+                    this.total = document.get_n_pages ();
+                    settings.last_page = this.total;
 
                     int width  = (int)(settings.zoom * page_width);
                     int height = (int)(settings.zoom * page_height);
@@ -485,8 +487,6 @@ namespace Aesop {
                 mode_switch.set_sensitive (true);
 
                 settings.last_file = filename;
-                settings.last_page = page_count;
-                settings.pages_total = total;
             } else {
                 welcome.show ();
                 page_box.hide ();
@@ -518,7 +518,7 @@ namespace Aesop {
             settings.zoom = zoom;
             settings.last_page = page_count;
             settings.last_file = filename;
-            settings.pages_total = total;
+            settings.pages_total = this.total;
 
             return false;
         }
