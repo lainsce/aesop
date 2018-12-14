@@ -103,5 +103,6 @@
     <custom>
         <value key="x-appcenter-color-primary">#ccbbaa</value>
         <value key="x-appcenter-color-primary-text">#333333</value>
+        <value key="x-appcenter-suggested-price">1</value>
     </custom>
 </component>
