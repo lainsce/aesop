@@ -108,10 +108,6 @@ msgstr ""
 msgid "File couldn't be accessed"
 msgstr ""
 
-#: src/Application.vala:158
-msgid "File couldn't be accessed"
-msgstr ""
-
 #: src/Application.vala:199
 msgid "AppInfo object not found for Aesop."
 msgstr ""
