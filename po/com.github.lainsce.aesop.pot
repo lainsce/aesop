@@ -52,14 +52,6 @@ msgstr ""
 msgid "PDF;Document;Viewer;"
 msgstr ""
 
-#: data/com.github.lainsce.aesop.desktop:6
-msgid "PDF;Document;Viewer;"
-msgstr ""
-
-#: src/Widgets/LivemodeButton.vala:29
-msgid "Enable Live Mode"
-msgstr ""
-
 #: src/Widgets/LivemodeButton.vala:29
 msgid "Enable Live Mode"
 msgstr ""
