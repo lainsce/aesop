@@ -55,6 +55,14 @@
         </screenshot>
     </screenshots>
     <releases>
+      <release version="1.0.6" date="2019-03-15">
+          <description>
+              <p>Release: Bullet Point</p>
+              <ul>
+                  <li>French Translation.</li>
+              </ul>
+          </description>
+      </release>
       <release version="1.0.5" date="2018-10-05">
           <description>
               <p>Release: Page Marker</p>
