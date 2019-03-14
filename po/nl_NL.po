@@ -1,0 +1,197 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE com.github.lainsce.aesop'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the com.github.lainsce.aesop package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: com.github.lainsce.aesop\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-04-07 02:57-0300\n"
+"PO-Revision-Date: 2019-03-14 18:30+0100\n"
+"Language-Team: Dutch <vistausss@outlook.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.1.1\n"
+"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: nl_NL\n"
+
+#: data/com.github.lainsce.aesop.appdata.xml:6
+#: data/com.github.lainsce.aesop.desktop:2 src/MainWindow.vala:279
+msgid "Aesop"
+msgstr "Aesop"
+
+#: data/com.github.lainsce.aesop.appdata.xml:7
+#: data/com.github.lainsce.aesop.desktop:3
+msgid "The simplest PDF viewer around"
+msgstr "De eenvoudigste PDF-lezer die er bestaat"
+
+#: data/com.github.lainsce.aesop.appdata.xml:9
+msgid ""
+"Open up any of your PDF files and enjoy reading it from the comfort of this "
+"application"
+msgstr ""
+"Open je PDF-bestanden en lees ze met genot, dankzij de eenvoud van deze "
+"applicatie"
+
+#: data/com.github.lainsce.aesop.appdata.xml:11
+msgid "Quit anytime with the shortcut Ctrl + Q"
+msgstr "Sluit af met Ctrl + Q"
+
+#: data/com.github.lainsce.aesop.appdata.xml:12
+msgid "Go fullscreen with F11"
+msgstr "Schakel over naar volledig scherm met F11"
+
+#: data/com.github.lainsce.aesop.appdata.xml:13
+msgid "Open any PDF file from anywhere, even externally"
+msgstr "Open een PDF-bestand vanuit elke locatie, zelfs een externe"
+
+#: data/com.github.lainsce.aesop.appdata.xml:14
+msgid "Print the current viewed document"
+msgstr "Druk het momenteel getoonde document af"
+
+#: data/com.github.lainsce.aesop.desktop:6
+msgid "PDF;Document;Viewer;"
+msgstr "PDF;Document;Weergave;"
+
+#: src/Widgets/LivemodeButton.vala:29
+msgid "Enable Live Mode"
+msgstr "Live-modus inschakelen"
+
+#: src/Application.vala:70
+msgid "ERROR: "
+msgstr "FOUT: "
+
+#: src/Application.vala:75
+msgid "Copyright 2018 Lains"
+msgstr "Copyright 2018 Lains"
+
+#: src/Application.vala:102
+msgid "Maybe you do not have the necessary permissions."
+msgstr "Wellicht beschik je niet over de juiste rechten."
+
+#: src/Application.vala:104
+msgid "Maybe the file path provided is not valid."
+msgstr "Wellicht is het opgegeven bestandspad onjuist."
+
+#: src/Application.vala:106
+msgid "The location is read-only."
+msgstr "De locatie is alleen-lezen."
+
+#: src/Application.vala:108
+msgid "The parent directory doesn't exist."
+msgstr "De bovenliggende map bestaat niet."
+
+#: src/Application.vala:115
+msgid ""
+"File \"%s\" cannot be created.\n"
+"%s"
+msgstr ""
+"Het bestand '%' kan niet worden gecreëerd.\n"
+"%s"
+
+#: src/Application.vala:125
+msgid ""
+"File \"%s\" cannot be opened.\n"
+"%s"
+msgstr ""
+"Het bestand '%s' kan niet worden geopend.\n"
+"%s"
+
+#: src/Application.vala:134
+msgid "It is a mountable location."
+msgstr "Het is een aankoppelbare locatie."
+
+#: src/Application.vala:137
+msgid "It is a directory."
+msgstr "Het is een map."
+
+#: src/Application.vala:140
+msgid ""
+"It is a \"special\" file such as a socket,\n"
+" fifo, block device, or character device."
+msgstr ""
+"Het is een 'speciaal' bestand, zoals een socket,\n"
+" fifo, block- of tekenapparaat."
+
+#: src/Application.vala:143
+msgid "It is an \"unknown\" file type."
+msgstr "Het is een 'onbekend' bestandstype."
+
+#: src/Application.vala:158
+msgid "File couldn't be accessed"
+msgstr "Geen toegang tot bestand"
+
+#: src/Application.vala:199
+msgid "AppInfo object not found for Aesop."
+msgstr "Aesop AppInfo-object niet gevonden."
+
+#: src/Application.vala:227
+msgid "Print copyright info and exit"
+msgstr "Toon copyright-informatie en sluit af"
+
+#: src/MainWindow.vala:108
+msgid "No PDF File Open"
+msgstr "Je hebt nog geen PDF-bestand geopend"
+
+#: src/MainWindow.vala:108
+msgid "Open a PDF file"
+msgstr "Open een PDF-bestand"
+
+#: src/MainWindow.vala:109
+msgid "Open PDF"
+msgstr "PDF openen"
+
+#: src/MainWindow.vala:109
+msgid "Open a PDF for viewing."
+msgstr "Open een PDF om deze te bekijken."
+
+#: src/MainWindow.vala:161
+msgid "Light background"
+msgstr "Lichte achtergrond"
+
+#: src/MainWindow.vala:162
+msgid "Dark background"
+msgstr "Donkere achtergrond"
+
+#: src/MainWindow.vala:179
+msgid "Page:"
+msgstr "Pagina:"
+
+#: src/MainWindow.vala:197
+msgid "Printâ¦"
+msgstr "Afdrukken"
+
+#: src/MainWindow.vala:201
+msgid "Reload the pdf every 30s."
+msgstr "Herlaad het PDF-bestand elke 30s."
+
+#: src/MainWindow.vala:205
+msgid "Zoom Out"
+msgstr "Uitzoomen"
+
+#: src/MainWindow.vala:209
+msgid "Zoom 1:1"
+msgstr "1:1 zoomen"
+
+#: src/MainWindow.vala:213
+msgid "Zoom In"
+msgstr "Inzoomen"
+
+#: src/MainWindow.vala:240
+msgid "Settings"
+msgstr "Instellingen"
+
+#: src/MainWindow.vala:277 src/MainWindow.vala:479
+msgid "Aesop - %s"
+msgstr "Aesop - %s"
+
+#: src/MainWindow.vala:366 src/MainWindow.vala:369
+msgid "Open"
+msgstr "Openen"
+
+#: src/MainWindow.vala:368
+msgid "Cancel"
+msgstr "Annuleren"
