@@ -16,8 +16,9 @@
  */
 namespace Aesop {
     public class MainWindow : Gtk.Window {
-        public Gtk.Image image;
+        public Gtk.DrawingArea image;
         public Gtk.ScrolledWindow page;
+        public Cairo.Context context;
         public Gtk.Stack stack;
         public Gtk.Box page_box;
         public Gtk.Box page_button_box;
@@ -115,10 +116,26 @@ namespace Aesop {
 				}
             });
 
-            image = new Gtk.Image ();
+            image = new Gtk.DrawingArea ();
+            image.expand = true;
+			image.set_size_request(this.get_allocated_width(),this.get_allocated_height());
+
+			var surface = new Cairo.ImageSurface (Cairo.Format.ARGB32, width, height);
+            context = new Cairo.Context (surface);
+
+            image.draw.connect ((context) => {
+				render_page (context);
+				return false;
+			});
+
+			var vbox = new Gtk.VBox (true, 0);
+			vbox.add (image);
+			vbox.expand = true;
+			vbox.show_all ();
+
             page = new Gtk.ScrolledWindow (null, null);
             page_vertical_adjustment = page.get_vadjustment ();
-            page.add (image);
+            page.add (vbox);
             var page_context = page.get_style_context ();
             page_context.add_class ("aesop-page");
 
@@ -133,7 +150,7 @@ namespace Aesop {
             if (settings.last_file != null) {
                 page_box.show ();
                 welcome.hide ();
-                render_page.begin ();
+                render_page (context);
 			} else {
                 welcome.show ();
                 page_box.hide ();
@@ -168,11 +185,11 @@ namespace Aesop {
                 if (mode_switch.active) {
                     debug ("Get dark!");
                     settings.invert = true;
-                    render_page.begin ();
+                    render_page (context);
                 } else {
                     debug ("Get light!");
                     settings.invert = false;
-                    render_page.begin ();
+                    render_page (context);
                 }
             });
 
@@ -185,7 +202,7 @@ namespace Aesop {
             page_button.value_changed.connect (() => {
                 int val = page_button.get_value_as_int ();
                 page_count = val;
-                render_page.begin ();
+                render_page (context);
             });
 
             page_button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
@@ -253,7 +270,7 @@ namespace Aesop {
             }
 
             settings.changed.connect (() => {
-                render_page.begin ();
+                render_page (context);
             });
 
             if (settings.last_file != "") {
@@ -263,7 +280,7 @@ namespace Aesop {
                     page_count = settings.last_page;
                     page_button_box.set_sensitive (true);
                     mode_switch.set_sensitive (true);
-                    render_page.begin ();
+                    render_page (context);
                 }
             }
 
@@ -300,7 +317,7 @@ namespace Aesop {
                     return;
                 }
                 zoom = zoom - 0.25;
-                render_page.begin ();
+                render_page (context);
                 var settings = AppSettings.get_default ();
                 settings.zoom = zoom;
             } else if (direction == "up") {
@@ -308,12 +325,12 @@ namespace Aesop {
                     return;
                 }
                 zoom = zoom + 0.25;
-                render_page.begin ();
+                render_page (context);
                 var settings = AppSettings.get_default ();
                 settings.zoom = zoom;
             } else if (direction == "reset") {
                 zoom = 1.00;
-                render_page.begin ();
+                render_page (context);
                 var settings = AppSettings.get_default ();
                 settings.zoom = zoom;
             }
@@ -325,7 +342,7 @@ namespace Aesop {
             }
             page_count = page_count - 1;
             page_button.set_value (page_count);
-            render_page.begin ();
+            render_page (context);
         }
 
         private void action_next_page () {
@@ -335,7 +352,7 @@ namespace Aesop {
             }
             page_count = page_count + 1;
             page_button.set_value (page_count);
-            render_page.begin ();
+            render_page (context);
         }
 
         private void action_full_screen_toggle () {
@@ -378,7 +395,7 @@ namespace Aesop {
                 filename = dialog.get_filename ();
                 settings.last_file = filename;
                 settings.last_page = this.total;
-                render_page.begin ();
+                render_page (context);
             }
             dialog.destroy ();
         }
@@ -402,7 +419,7 @@ namespace Aesop {
             return false;
         }
 
-        public async void on_draw_page (Gtk.PrintContext context, int page_nr) {
+        public void on_draw_page (Gtk.PrintContext pcontext, int page_nr) {
             var settings = AppSettings.get_default ();
 
             try {
@@ -413,7 +430,8 @@ namespace Aesop {
                 var pages = document.get_page (page_nr);
                 pages.get_size (out page_width, out page_height);
 
-                var context_light = context.get_cairo_context ();
+                var context_light = pcontext.get_cairo_context ();
+                context_light.set_source_surface (context_light.get_target (), 0, 1);
                 context_light.scale (settings.zoom, settings.zoom);
                 pages.render (context_light);
             } catch (Error e) {
@@ -421,13 +439,12 @@ namespace Aesop {
             }
         }
 
-        public async void render_page () {
+        public void render_page (Cairo.Context context) {
             var settings = AppSettings.get_default ();
             if (settings.last_file != null && filename != null) {
                 try {
                     document = new Poppler.Document.from_file (Filename.to_uri (filename), "");
-                    double page_width;
-                    double page_height;
+                    double page_width, page_height;
                     var pages = document.get_page (page_count - 1);
                     pages.get_size (out page_width, out page_height);
                     this.total = document.get_n_pages ();
@@ -437,10 +454,8 @@ namespace Aesop {
                     int height = (int)(settings.zoom * page_height);
 
                     // 20 here is margins.
-                    page.width_request = (int) page_width + 20;
-                    page.height_request = (int) page_height + 20;
-                    this.width_request = width / 2;
-                    this.height_request = height / 2;
+                    page.width_request = width + 20;
+                    page.height_request = height + 20;
                     page.set_halign (Gtk.Align.CENTER);
                     page.set_valign (Gtk.Align.CENTER);
 
@@ -448,32 +463,26 @@ namespace Aesop {
                         debug ("Get dark!");
                         var surface_dark = new Cairo.ImageSurface (Cairo.Format.ARGB32, width, height);
                         var context_dark = new Cairo.Context (surface_dark);
-                        context_dark.set_operator (Cairo.Operator.DIFFERENCE);
-                        context_dark.set_source_rgba (1, 1, 1, 1);
-                        context_dark.rectangle (0, 0, page_width, page_height);
-                        context_dark.paint ();
                         context_dark.scale (settings.zoom, settings.zoom);
-                        pages.render (context_dark);
                         context_dark.set_operator (Cairo.Operator.DIFFERENCE);
                         context_dark.set_source_rgba (1, 1, 1, 1);
-                        context_dark.rectangle (0, 0, page_width, page_height);
                         context_dark.paint ();
-                        Gdk.Pixbuf pixbuf_dark = Gdk.pixbuf_get_from_surface (surface_dark, 0, 0, width, height);
-                        this.image.set_from_pixbuf (pixbuf_dark);
-                        var image_context = image.get_style_context ();
-                        image_context.add_class ("aesop-image-dark");
-                        image_context.remove_class ("aesop-image-light");
+                        pages.render_for_printing (context_dark);
+                        context_dark.set_operator (Cairo.Operator.DIFFERENCE);
+                        context_dark.set_source_rgba (1, 1, 1, 1);
+                        context_dark.paint ();
+                        this.context.set_source_surface (context_dark.get_target (), 0, 1);
+                        context.fill ();
+                        image.queue_draw ();
                     } else {
                         debug ("Get light!");
                         var surface = new Cairo.ImageSurface (Cairo.Format.ARGB32, width, height);
-                        var context = new Cairo.Context (surface);
-                        context.scale (settings.zoom, settings.zoom);
-                        pages.render (context);
-                        Gdk.Pixbuf pixbuf = Gdk.pixbuf_get_from_surface (surface, 0, 0, width, height);
-                        this.image.set_from_pixbuf (pixbuf);
-                        var image_context = image.get_style_context ();
-                        image_context.remove_class ("aesop-image-dark");
-                        image_context.add_class ("aesop-image-light");
+                        var context_light = new Cairo.Context (surface);
+                        context_light.scale (settings.zoom, settings.zoom);
+                        pages.render_for_printing (context_light);
+                        this.context.set_source_surface (context_light.get_target (), 0, 1);
+                        context.fill ();
+                        image.queue_draw ();
                     }
 
                     this.set_title (("Aesop - %s").printf (GLib.Path.get_basename (filename)));

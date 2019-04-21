@@ -183,13 +183,13 @@ namespace Aesop {
 
                 window.filename = file.get_path ();
                 window.page_count = 1;
-                window.render_page.begin ();
+                window.render_page (window.context);
             }
             return true;
         }
 
         public MainWindow? get_last_window () {
-            unowned List<weak Gtk.Window> windows = get_windows ();
+            unowned List<Gtk.Window> windows = get_windows ();
             return windows.length () > 0 ? windows.last ().data as MainWindow : null;
         }
 

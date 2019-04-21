@@ -34,7 +34,7 @@ namespace Aesop {
                 if (win != null) {
                     if (settings.live_mode == true) {
                         Timeout.add_seconds (30, () => {
-                            win.render_page.begin ();
+                            win.render_page (win.context);
                             return false;
                         });
                     }
