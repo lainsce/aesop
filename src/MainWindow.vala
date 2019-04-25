@@ -363,6 +363,7 @@ namespace Aesop {
 
         public void show_open () {
             var settings = AppSettings.get_default ();
+	    List<Gtk.FileFilter> filters = new List<Gtk.FileFilter> ();
             var dialog = new Gtk.FileChooserDialog ("Open", this,
                                                 Gtk.FileChooserAction.OPEN,
                                                 "Cancel", Gtk.ResponseType.CANCEL,
@@ -372,6 +373,15 @@ namespace Aesop {
             }
             dialog.set_select_multiple (false);
             dialog.set_modal (true);
+	    
+	    var pdf_filter = new Gtk.FileFilter ();
+            pdf_filter.set_filter_name (_("PDF File"));
+            pdf_filter.add_mime_type ("application/pdf");
+            pdf_filter.add_pattern ("*.pdf");
+	    filters.append (pdf_filter);
+
+	    dialog.add_filter (pdf_filter);
+	    
             page_count = 1;
             dialog.show ();
             if (dialog.run () == Gtk.ResponseType.ACCEPT) {
