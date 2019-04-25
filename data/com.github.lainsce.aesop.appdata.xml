@@ -55,6 +55,16 @@
         </screenshot>
     </screenshots>
     <releases>
+      <release version="1.0.7" date="2019-04-26">
+          <description>
+              <p>Release: Guillemet</p>
+              <ul>
+                  <li>Fixed: The app would open other files than PDFs.</li>
+		  <li>Fixed: The app couldn't be maximized.</li>
+		  <li>Fixed: Some translations weren't working.</li>
+              </ul>
+          </description>
+      </release>
       <release version="1.0.6" date="2019-03-15">
           <description>
               <p>Release: Bullet Point</p>
