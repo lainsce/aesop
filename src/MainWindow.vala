@@ -105,7 +105,7 @@ namespace Aesop {
             actions.add_action_entries (action_entries, this);
             insert_action_group ("win", actions);
 
-            welcome = new Granite.Widgets.Welcome("No PDF File Open", _("Open a PDF file"));
+            welcome = new Granite.Widgets.Welcome(_("No PDF File Open"), _("Open a PDF file"));
             welcome.append("document-open", _("Open PDF"), _("Open a PDF for viewing."));
             welcome.activated.connect((index) => {
 				switch (index){
@@ -158,8 +158,8 @@ namespace Aesop {
             });
 
             mode_switch = new Granite.ModeSwitch.from_icon_name ("display-brightness-symbolic", "weather-clear-night-symbolic");
-            mode_switch.primary_icon_tooltip_text = ("Light background");
-            mode_switch.secondary_icon_tooltip_text = ("Dark background");
+            mode_switch.primary_icon_tooltip_text = _("Light background");
+            mode_switch.secondary_icon_tooltip_text = _("Dark background");
             mode_switch.valign = Gtk.Align.CENTER;
             mode_switch.has_focus = false;
             mode_switch.set_sensitive (false);
