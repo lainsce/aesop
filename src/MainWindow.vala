@@ -198,7 +198,7 @@ namespace Aesop {
             print_button.action_name = ACTION_PREFIX + ACTION_PRINT;
 
             var livemode_button = new Widgets.LiveModeButton ();
-            livemode_button.tooltip_text = "Reload the pdf every 30s.";
+            livemode_button.tooltip_text = _("Reload the pdf every 30s.");
 
             var zoom_out_button = new Gtk.Button.from_icon_name ("zoom-out-symbolic", Gtk.IconSize.MENU);
             zoom_out_button.action_name = ACTION_PREFIX + ACTION_ZOOM_OUT;
@@ -366,8 +366,8 @@ namespace Aesop {
 	    List<Gtk.FileFilter> filters = new List<Gtk.FileFilter> ();
             var dialog = new Gtk.FileChooserDialog ("Open", this,
                                                 Gtk.FileChooserAction.OPEN,
-                                                "Cancel", Gtk.ResponseType.CANCEL,
-                                                "Open",   Gtk.ResponseType.ACCEPT);
+                                                (_("Cancel")), Gtk.ResponseType.CANCEL,
+                                                (_("Open")),   Gtk.ResponseType.ACCEPT);
             if (settings.last_file != null) {
                 dialog.set_current_folder (Path.get_dirname (filename));
             }
