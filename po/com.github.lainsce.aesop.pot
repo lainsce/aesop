@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE com.github.lainsce.aesop'S COPYRIGHT HOLDER
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the com.github.lainsce.aesop package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,112 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.lainsce.aesop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-07 02:57-0300\n"
+"POT-Creation-Date: 2019-05-04 14:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: data/com.github.lainsce.aesop.appdata.xml:6
-#: data/com.github.lainsce.aesop.desktop:2
-#: src/MainWindow.vala:279
-msgid "Aesop"
-msgstr ""
-
-#: data/com.github.lainsce.aesop.appdata.xml:7
-#: data/com.github.lainsce.aesop.desktop:3
-msgid "The simplest PDF viewer around"
-msgstr ""
-
-#: data/com.github.lainsce.aesop.appdata.xml:9
-msgid "Open up any of your PDF files and enjoy reading it from the comfort of this application"
-msgstr ""
-
-#: data/com.github.lainsce.aesop.appdata.xml:11
-msgid "Quit anytime with the shortcut Ctrl + Q"
-msgstr ""
-
-#: data/com.github.lainsce.aesop.appdata.xml:12
-msgid "Go fullscreen with F11"
-msgstr ""
-
-#: data/com.github.lainsce.aesop.appdata.xml:13
-msgid "Open any PDF file from anywhere, even externally"
-msgstr ""
-
-#: data/com.github.lainsce.aesop.appdata.xml:14
-msgid "Print the current viewed document"
-msgstr ""
-
-#: data/com.github.lainsce.aesop.desktop:6
-msgid "PDF;Document;Viewer;"
-msgstr ""
 
 #: src/Widgets/LivemodeButton.vala:29
 msgid "Enable Live Mode"
-msgstr ""
-
-#: src/Application.vala:70
-msgid "ERROR: "
-msgstr ""
-
-#: src/Application.vala:75
-msgid "Copyright 2018 Lains"
-msgstr ""
-
-#: src/Application.vala:102
-msgid "Maybe you do not have the necessary permissions."
-msgstr ""
-
-#: src/Application.vala:104
-msgid "Maybe the file path provided is not valid."
-msgstr ""
-
-#: src/Application.vala:106
-msgid "The location is read-only."
-msgstr ""
-
-#: src/Application.vala:108
-msgid "The parent directory doesn't exist."
-msgstr ""
-
-#: src/Application.vala:115
-msgid "File \"%s\" cannot be created.\n%s"
-msgstr ""
-
-#: src/Application.vala:125
-msgid "File \"%s\" cannot be opened.\n%s"
-msgstr ""
-
-#: src/Application.vala:134
-msgid "It is a mountable location."
-msgstr ""
-
-#: src/Application.vala:137
-msgid "It is a directory."
-msgstr ""
-
-#: src/Application.vala:140
-msgid "It is a \"special\" file such as a socket,\n fifo, block device, or character device."
-msgstr ""
-
-#: src/Application.vala:143
-msgid "It is an \"unknown\" file type."
-msgstr ""
-
-#: src/Application.vala:158
-msgid "File couldn't be accessed"
-msgstr ""
-
-#: src/Application.vala:199
-msgid "AppInfo object not found for Aesop."
-msgstr ""
-
-#: src/Application.vala:227
-msgid "Print copyright info and exit"
 msgstr ""
 
 #: src/MainWindow.vala:108
@@ -130,6 +35,10 @@ msgstr ""
 
 #: src/MainWindow.vala:109
 msgid "Open a PDF for viewing."
+msgstr ""
+
+#: src/MainWindow.vala:152
+msgid "Open…"
 msgstr ""
 
 #: src/MainWindow.vala:161
@@ -168,16 +77,14 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: src/MainWindow.vala:277
-#: src/MainWindow.vala:479
-msgid "Aesop - %s"
-msgstr ""
-
-#: src/MainWindow.vala:366
-#: src/MainWindow.vala:369
+#: src/MainWindow.vala:367 src/MainWindow.vala:370
 msgid "Open"
 msgstr ""
 
-#: src/MainWindow.vala:368
+#: src/MainWindow.vala:369
 msgid "Cancel"
+msgstr ""
+
+#: src/MainWindow.vala:378
+msgid "PDF File"
 msgstr ""

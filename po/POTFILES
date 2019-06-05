@@ -1,5 +1,3 @@
-data/com.github.lainsce.aesop.appdata.xml
-data/com.github.lainsce.aesop.desktop
 src/Widgets/LivemodeButton.vala
 src/Application.vala
 src/MainWindow.vala
