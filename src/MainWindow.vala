@@ -19,10 +19,10 @@ namespace Aesop {
         public Gtk.Image image;
         public Gtk.ScrolledWindow page;
         public Gtk.Stack stack;
-        public Gtk.Box page_box;
-        public Gtk.Box page_button_box;
+        public Gtk.Grid page_box;
+        public Gtk.Grid page_button_box;
         public Poppler.Document document;
-        public double zoom = 1.00;
+        public double zoom = 1.25;
         public double SIZE_MAX = 2.00;
         public double SIZE_MIN = 0.25;
         public string filename;
@@ -117,14 +117,15 @@ namespace Aesop {
 
             image = new Gtk.Image ();
             page = new Gtk.ScrolledWindow (null, null);
+            page.expand = true;
             page_vertical_adjustment = page.get_vadjustment ();
             page.add (image);
             var page_context = page.get_style_context ();
             page_context.add_class ("aesop-page");
 
-            page_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-            page_box.pack_start (page, false, false, 0);
-            page_box.set_valign (Gtk.Align.CENTER);
+            page_box = new Gtk.Grid ();
+            page_box.expand = true;
+            page_box.add (page);
 
             stack = new Gtk.Stack ();
             stack.add_named (welcome, "welcome");
@@ -181,6 +182,7 @@ namespace Aesop {
             page_button.set_value (page_count);
             page_button.has_focus = false;
             page_button.valign = Gtk.Align.CENTER;
+            page_button.set_value (settings.last_page);
 
             page_button.value_changed.connect (() => {
                 int val = page_button.get_value_as_int ();
@@ -188,10 +190,12 @@ namespace Aesop {
                 render_page.begin ();
             });
 
-            page_button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+            page_button_box = new Gtk.Grid ();
+            page_button_box.column_spacing = 6;
             page_button_box.set_sensitive (false);
-            page_button_box.pack_start (page_label, false, false, 0);
-            page_button_box.pack_start (page_button, false, false, 6);
+            page_button_box.valign = Gtk.Align.CENTER;
+            page_button_box.add (page_label);
+            page_button_box.add (page_button);
 
             var print_button = new Gtk.ModelButton ();
             print_button.text = (_("Print…"));
@@ -387,7 +391,7 @@ namespace Aesop {
             if (dialog.run () == Gtk.ResponseType.ACCEPT) {
                 filename = dialog.get_filename ();
                 settings.last_file = filename;
-                settings.last_page = this.total;
+                settings.pages_total = this.total;
                 render_page.begin ();
             }
             dialog.destroy ();
@@ -441,18 +445,18 @@ namespace Aesop {
                     var pages = document.get_page (page_count - 1);
                     pages.get_size (out page_width, out page_height);
                     this.total = document.get_n_pages ();
-                    settings.last_page = this.total;
+                    settings.pages_total = this.total;
+                    Gtk.Allocation ac;
+                    this.get_allocation (out ac);
 
                     int width  = (int)(settings.zoom * page_width);
                     int height = (int)(settings.zoom * page_height);
 
                     // 20 here is margins.
-                    page.width_request = (int) page_width + 20;
-                    page.height_request = (int) page_height + 20;
-                    this.width_request = width / 2;
-                    this.height_request = height / 2;
-                    page.set_halign (Gtk.Align.CENTER);
-                    page.set_valign (Gtk.Align.CENTER);
+                    page.width_request = (int) ac.width / 2;
+                    page.height_request = (int) ac.height / 2;
+                    this.width_request = width;
+                    this.height_request = height;
 
                     if (settings.invert) {
                         debug ("Get dark!");
@@ -497,6 +501,7 @@ namespace Aesop {
                 mode_switch.set_sensitive (true);
 
                 settings.last_file = filename;
+                settings.last_page = page_count;
             } else {
                 welcome.show ();
                 page_box.hide ();
