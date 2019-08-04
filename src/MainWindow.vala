@@ -144,6 +144,7 @@ namespace Aesop {
             toolbar.title = this.title;
             toolbar.has_subtitle = false;
             toolbar.set_show_close_button (true);
+            toolbar.decoration_layout = "close:";
             var toolbar_context = toolbar.get_style_context ();
             toolbar_context.add_class ("aesop-toolbar");
 
