@@ -1,0 +1,90 @@
+# French translations for com.github.lainsce.aesop package.
+# Copyright (C) 2019 THE com.github.lainsce.aesop'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the com.github.lainsce.aesop package.
+# NathanBnm, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: com.github.lainsce.aesop\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-05-04 14:34+0200\n"
+"PO-Revision-Date: 2019-09-02 10:34+0200\n"
+"Last-Translator: Mirko Brombin\n"
+"Language-Team: none\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: src/Widgets/LivemodeButton.vala:29
+msgid "Enable Live Mode"
+msgstr "Abilita modalità live"
+
+#: src/MainWindow.vala:108
+msgid "No PDF File Open"
+msgstr "Nessun PDF aperto"
+
+#: src/MainWindow.vala:108
+msgid "Open a PDF file"
+msgstr "Apri un PDF"
+
+#: src/MainWindow.vala:109
+msgid "Open PDF"
+msgstr "Apri PDF"
+
+#: src/MainWindow.vala:109
+msgid "Open a PDF for viewing."
+msgstr "Apri un PDF per visualizzarlo."
+
+#: src/MainWindow.vala:152
+msgid "Open…"
+msgstr "Apri…"
+
+#: src/MainWindow.vala:161
+msgid "Light background"
+msgstr "Sfondo chiaro"
+
+#: src/MainWindow.vala:162
+msgid "Dark background"
+msgstr "Sfondo scuro"
+
+#: src/MainWindow.vala:179
+msgid "Page:"
+msgstr "Pagina :"
+
+#: src/MainWindow.vala:197
+msgid "Print…"
+msgstr "Stampa…"
+
+#: src/MainWindow.vala:201
+msgid "Reload the pdf every 30s."
+msgstr "Ricarica il PDF ogni 30s."
+
+#: src/MainWindow.vala:205
+msgid "Zoom Out"
+msgstr "Zoom indietro"
+
+#: src/MainWindow.vala:209
+msgid "Zoom 1:1"
+msgstr "Zoom 1:1"
+
+#: src/MainWindow.vala:213
+msgid "Zoom In"
+msgstr "Zoom avanti"
+
+#: src/MainWindow.vala:240
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: src/MainWindow.vala:367 src/MainWindow.vala:370
+msgid "Open"
+msgstr "Apri"
+
+#: src/MainWindow.vala:369
+msgid "Cancel"
+msgstr "Annulla"
+
+#: src/MainWindow.vala:378
+msgid "PDF File"
+msgstr "File PDF"
