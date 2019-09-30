@@ -21,7 +21,7 @@ msgstr ""
 
 #: src/Widgets/LivemodeButton.vala:29
 msgid "Enable Live Mode"
-msgstr "Gece Kipini Etkinleştir"
+msgstr "Canlı Kipi Etkinleştir"
 
 #: src/MainWindow.vala:108
 msgid "No PDF File Open"
@@ -61,7 +61,7 @@ msgstr "Yazdır…"
 
 #: src/MainWindow.vala:201
 msgid "Reload the pdf every 30s."
-msgstr "PDF belgesini her 30 saniyede bir yeniden yükle."
+msgstr "PDF dosyasını her 30 saniyede bir yeniden yükle."
 
 #: src/MainWindow.vala:205
 msgid "Zoom Out"
