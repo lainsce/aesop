@@ -23,8 +23,8 @@ namespace Aesop {
         public Gtk.Grid page_button_box;
         public Poppler.Document document;
         public double zoom = 1.25;
-        public double SIZE_MAX = 2.00;
-        public double SIZE_MIN = 0.25;
+        private const double SIZE_MAX = 2.00;
+        private const double SIZE_MIN = 0.25;
         public string filename;
         public int page_count = 1;
         public int total = 1;
@@ -378,7 +378,7 @@ namespace Aesop {
             }
             dialog.set_select_multiple (false);
             dialog.set_modal (true);
-	    
+
 	    var pdf_filter = new Gtk.FileFilter ();
             pdf_filter.set_filter_name (_("PDF File"));
             pdf_filter.add_mime_type ("application/pdf");
@@ -386,7 +386,7 @@ namespace Aesop {
 	    filters.append (pdf_filter);
 
 	    dialog.add_filter (pdf_filter);
-	    
+
             page_count = 1;
             dialog.show ();
             if (dialog.run () == Gtk.ResponseType.ACCEPT) {
