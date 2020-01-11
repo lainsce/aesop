@@ -1,6 +1,6 @@
 # Name our project
 project('com.github.lainsce.aesop', ['vala', 'c'],
-    version: '1.1.0'
+    version: '1.1.4'
 )
 
 # Import main lib files
