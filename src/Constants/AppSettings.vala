@@ -16,17 +16,43 @@
  */
 
 namespace Aesop {
-    public class AppSettings : Granite.Services.Settings {
-        public int width { get; set; }
-        public int height { get; set; }
-        public bool maximized { get; set; }
-        public bool invert { get; set; }
-        public bool live_mode { get; set; }
-        public double zoom { get; set; }
-        public string last_file { get; set; }
-        public int last_page { get; set; }
-        public int pages_total { get; set; }
-
+    public class AppSettings : GLib.Settings {
+        public int width {
+            get { return get_int ("width"); }
+            set { set_int ("width", value); }
+        }
+        public int height {
+            get { return get_int ("height"); }
+            set { set_int ("height", value); }
+        }
+        public bool maximized {
+            get { return get_boolean ("maximized"); }
+            set { set_boolean ("maximized", value); }
+        }
+        public bool invert {
+            get { return get_boolean ("invert"); }
+            set { set_boolean ("invert", value); }
+        }
+        public bool live_mode {
+            get { return get_boolean ("live-mode"); }
+            set { set_boolean ("live-mode", value); }
+        }
+        public double zoom {
+            get { return get_double ("zoom"); }
+            set { set_double ("zoom", value); }
+        }
+        public string last_file {
+            get { return get_string ("last-file"); }
+            set { set_string ("last-file", value); }
+        }
+        public int last_page {
+            get { return get_int ("last-page"); }
+            set { set_int ("last-page", value); }
+        }
+        public int pages-total {
+            get { return get_int ("pages-total"); }
+            set { set_int ("pages-total", value); }
+        }
 
         private static AppSettings? instance;
         public static unowned AppSettings get_default () {
@@ -38,7 +64,7 @@ namespace Aesop {
         }
 
         private AppSettings () {
-            base ("com.github.lainsce.aesop");
+            Object (schema_id: "com.github.lainsce.aesop");
         }
     }
 }

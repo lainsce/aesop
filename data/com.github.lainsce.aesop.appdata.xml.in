@@ -54,6 +54,14 @@
         </screenshot>
     </screenshots>
     <releases>
+      <release version="1.2.0" date="2020-01-30">
+          <description>
+              <p>Release: Page Ears</p>
+              <ul>
+                <li>Minor backend fixes.</li>
+              </ul>
+          </description>
+      </release>
       <release version="1.1.4" date="2020-01-15">
           <description>
               <p>Release: Turn of Pages</p>
