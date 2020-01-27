@@ -49,7 +49,7 @@ namespace Aesop {
             get { return get_int ("last-page"); }
             set { set_int ("last-page", value); }
         }
-        public int pages-total {
+        public int pages_total {
             get { return get_int ("pages-total"); }
             set { set_int ("pages-total", value); }
         }
