@@ -42,7 +42,7 @@ namespace Aesop {
             set { set_double ("zoom", value); }
         }
         public string last_file {
-            get { return get_string ("last-file"); }
+            owned get { return get_string ("last-file"); }
             set { set_string ("last-file", value); }
         }
         public int last_page {
