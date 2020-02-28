@@ -64,6 +64,8 @@ namespace Aesop {
                     default_width: 630,
                     default_height: 800);
 
+            sync_switch ();
+
             key_press_event.connect ((e) => {
                 uint keycode = e.hardware_keycode;
                 if ((e.state & Gdk.ModifierType.CONTROL_MASK) != 0) {
@@ -169,11 +171,9 @@ namespace Aesop {
             mode_switch.notify["active"].connect (() => {
                 if (mode_switch.active) {
                     debug ("Get dark!");
-                    settings.invert = true;
                     render_page.begin ();
                 } else {
                     debug ("Get light!");
-                    settings.invert = false;
                     render_page.begin ();
                 }
             });
@@ -285,6 +285,11 @@ namespace Aesop {
             }
 
             this.show_all ();
+        }
+
+        public void sync_switch () {
+            var settings = AppSettings.get_default ();
+            settings.bind ("invert", mode_switch, "active", GLib.SettingsBindFlags.DEFAULT);
         }
 
         public void action_zoom_default () {
@@ -446,7 +451,6 @@ namespace Aesop {
                     var pages = document.get_page (page_count - 1);
                     pages.get_size (out page_width, out page_height);
                     this.total = document.get_n_pages ();
-                    settings.pages_total = this.total;
                     Gtk.Allocation ac;
                     this.get_allocation (out ac);
 
@@ -500,9 +504,6 @@ namespace Aesop {
                 welcome.hide ();
                 page_button_box.set_sensitive (true);
                 mode_switch.set_sensitive (true);
-
-                settings.last_file = filename;
-                settings.last_page = page_count;
             } else {
                 welcome.show ();
                 page_box.hide ();

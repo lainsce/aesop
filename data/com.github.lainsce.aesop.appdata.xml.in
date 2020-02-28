@@ -54,6 +54,14 @@
         </screenshot>
     </screenshots>
     <releases>
+      <release version="1.2.1" date="2020-03-03">
+          <description>
+              <p>Release: Ampersand</p>
+              <ul>
+                <li>Fixed: Major crash when opening PDFs.</li>
+              </ul>
+          </description>
+      </release>
       <release version="1.2.0" date="2020-01-30">
           <description>
               <p>Release: Page Ears</p>
