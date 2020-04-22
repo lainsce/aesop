@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2018 Lains
+ * Copyright (c) 2020 Lains
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,15 +16,16 @@
  */
 namespace Aesop {
     public class MainWindow : Gtk.Window {
+        public Gtk.HeaderBar toolbar;
         public Gtk.Image image;
         public Gtk.ScrolledWindow page;
         public Gtk.Stack stack;
         public Gtk.Grid page_box;
         public Gtk.Grid page_button_box;
         public Poppler.Document document;
-        public double zoom = 1.25;
-        private const double SIZE_MAX = 2.00;
-        private const double SIZE_MIN = 0.25;
+        public double zoom = 1.00;
+        private const double SIZE_MAX = 1.50;
+        private const double SIZE_MIN = 0.50;
         public string filename;
         public int page_count = 1;
         public int total = 1;
@@ -60,9 +61,7 @@ namespace Aesop {
 
         public MainWindow (Gtk.Application application) {
             Object (application: application,
-                    resizable: true,
-                    default_width: 630,
-                    default_height: 800);
+                    resizable: true);
 
             sync_switch ();
 
@@ -119,13 +118,17 @@ namespace Aesop {
 
             image = new Gtk.Image ();
             page = new Gtk.ScrolledWindow (null, null);
-            page.expand = true;
+            page.set_policy (Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER);
+            page.valign = Gtk.Align.CENTER;
+            page.halign = Gtk.Align.CENTER;
             page_vertical_adjustment = page.get_vadjustment ();
             page.add (image);
             var page_context = page.get_style_context ();
             page_context.add_class ("aesop-page");
 
             page_box = new Gtk.Grid ();
+            page_box.column_homogeneous = true;
+            page_box.row_homogeneous = true;
             page_box.expand = true;
             page_box.add (page);
 
@@ -142,11 +145,9 @@ namespace Aesop {
                 page_box.hide ();
             }
 
-            var toolbar = new Gtk.HeaderBar ();
+            toolbar = new Gtk.HeaderBar ();
             toolbar.title = this.title;
-            toolbar.has_subtitle = false;
             toolbar.set_show_close_button (true);
-            toolbar.decoration_layout = "close:";
             var toolbar_context = toolbar.get_style_context ();
             toolbar_context.add_class ("aesop-toolbar");
 
@@ -277,12 +278,7 @@ namespace Aesop {
             this.set_titlebar (toolbar);
             this.set_icon_name ("com.github.lainsce.aesop");
             this.set_default_size (settings.width, settings.height);
-
-            if (stack.get_visible_child_name () == "page_box") {
-                this.set_title (("Aesop - %s").printf (GLib.Path.get_basename (settings.last_file)));
-            } else {
-                this.set_title ("Aesop");
-            }
+            this.set_title ("Aesop");
 
             this.show_all ();
         }
@@ -308,16 +304,20 @@ namespace Aesop {
             if (direction == "down") {
                 if (zoom < SIZE_MIN) {
                     return;
+                } else {
+                    zoom = zoom - 0.25;
                 }
-                zoom = zoom - 0.25;
+                
                 render_page.begin ();
                 var settings = AppSettings.get_default ();
                 settings.zoom = zoom;
             } else if (direction == "up") {
                 if (zoom > SIZE_MAX) {
                     return;
+                } else {
+                    zoom = zoom + 0.25;
                 }
-                zoom = zoom + 0.25;
+                
                 render_page.begin ();
                 var settings = AppSettings.get_default ();
                 settings.zoom = zoom;
@@ -457,12 +457,6 @@ namespace Aesop {
                     int width  = (int)(settings.zoom * page_width);
                     int height = (int)(settings.zoom * page_height);
 
-                    // 20 here is margins.
-                    page.width_request = (int) ac.width / 2;
-                    page.height_request = (int) ac.height / 2;
-                    this.width_request = width;
-                    this.height_request = height;
-
                     if (settings.invert) {
                         debug ("Get dark!");
                         var surface_dark = new Cairo.ImageSurface (Cairo.Format.ARGB32, width, height);
@@ -495,8 +489,13 @@ namespace Aesop {
                         image_context.add_class ("aesop-image-light");
                     }
 
-                    this.set_title (("Aesop - %s").printf (GLib.Path.get_basename (filename)));
+                    toolbar.subtitle = ("%s").printf (GLib.Path.get_basename (filename));
                     this.page.get_vadjustment ().set_value (0);
+
+                    page.width_request = width;
+                    page.height_request = height;
+                    this.width_request = width;
+                    this.height_request = height;
                 } catch (Error e) {
                     warning ("%s", e.message);
                 }

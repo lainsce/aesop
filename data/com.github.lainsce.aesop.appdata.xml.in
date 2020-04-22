@@ -54,6 +54,14 @@
         </screenshot>
     </screenshots>
     <releases>
+      <release version="1.2.2" date="2020-04-24">
+          <description>
+              <p>Release: Dagger</p>
+              <ul>
+                <li>Added: New UI handling of PDF pages, and maximization is possible now.</li>
+              </ul>
+          </description>
+      </release>
       <release version="1.2.1" date="2020-03-03">
           <description>
               <p>Release: Ampersand</p>
